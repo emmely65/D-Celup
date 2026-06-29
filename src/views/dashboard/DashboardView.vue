@@ -47,7 +47,7 @@ const cashierSummary = computed(() => dashboardStore.cashierSummary ?? {})
     </div>
 
     <div class="mt-5 grid gap-4 xl:grid-cols-[2fr_1fr]">
-      <WeeklySalesChart :items="dashboardStore.weeklySales" />
+      <WeeklySalesChart />
       <LowStockWidget :materials="dashboardStore.lowStockMaterials" />
     </div>
 

@@ -257,7 +257,7 @@ function handleDashboard(method, segments, params, config) {
   const action = segments[1]
   if (action === 'admin-summary') return ok(buildSummary())
   if (action === 'cashier-summary') return ok(buildSummary(currentUser(config).id))
-  if (action === 'weekly-sales') return ok(buildWeeklySales())
+  if (action === 'weekly-sales') return ok(buildWeeklySales(params))
   if (action === 'top-products') return ok(buildTopProducts(params))
   if (action === 'low-stock-materials') {
     return ok(db.rawMaterials.filter((item) => item.is_active && Number(item.current_stock) <= Number(item.min_stock)).map(withIdentity))
@@ -672,20 +672,26 @@ function buildSummary(userId = null) {
   }
 }
 
-function buildWeeklySales() {
-  return Array.from({ length: 7 }).map((_, index) => {
+function buildWeeklySales(params = {}) {
+  const period = params.period || 'weekly'
+  const days = period === 'monthly' ? 30 : 7
+  return Array.from({ length: days }).map((_, index) => {
     const date = new Date()
-    date.setDate(date.getDate() - (6 - index))
+    date.setDate(date.getDate() - ((days - 1) - index))
     const dateOnly = toDateOnly(date)
     const transactions = db.transactions.filter((item) => item.status === 'paid' && item.trx_date === dateOnly)
-    const total = sumBy(transactions, 'total_amount')
+    const expenses = db.expenses.filter((item) => item.expense_date === dateOnly)
+    const totalIncome = sumBy(transactions, 'total_amount')
+    const totalExpense = sumBy(expenses, 'amount')
     return {
       date: dateOnly,
       label: dateOnly.slice(5),
-      total_amount: total,
-      total: total,
-      amount: total,
-      total_sales: total,
+      total_amount: totalIncome,
+      total_income: totalIncome,
+      total_expense: totalExpense,
+      total: totalIncome,
+      amount: totalIncome,
+      total_sales: totalIncome,
       total_transactions: transactions.length
     }
   })
