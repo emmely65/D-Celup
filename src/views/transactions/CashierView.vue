@@ -35,6 +35,16 @@ const filteredVariants = computed(() => {
   ].join(' ').toLowerCase().includes(query))
 })
 
+const groupedVariants = computed(() => {
+  const groups = {}
+  filteredVariants.value.forEach((variant) => {
+    const productName = variant.product?.name || 'Produk Lainnya'
+    if (!groups[productName]) groups[productName] = []
+    groups[productName].push(variant)
+  })
+  return Object.keys(groups).map((name) => ({ name, variants: groups[name] }))
+})
+
 onMounted(fetchVariants)
 // BUG-01: watch(debouncedSearch, () => {}) dihapus — tidak berguna.
 // filteredVariants sudah merupakan computed dari debouncedSearch sehingga otomatis reaktif.
@@ -97,8 +107,13 @@ async function submitTransaction() {
 
     <LoadingBlock v-if="isLoading" />
     <EmptyState v-else-if="!filteredVariants.length" title="Menu belum tersedia" description="Data varian produk belum ditemukan." />
-    <div v-else class="grid grid-cols-1 gap-3 pb-20 min-[420px]:grid-cols-2 md:pb-24 lg:grid-cols-3 2xl:grid-cols-4">
-      <ProductVariantCard v-for="variant in filteredVariants" :key="variant.id" :variant="variant" />
+    <div v-else class="pb-20 md:pb-24">
+      <div v-for="group in groupedVariants" :key="group.name" class="mb-6">
+        <h2 class="mb-3 text-lg font-extrabold text-dcelup-red">{{ group.name }}</h2>
+        <div class="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          <ProductVariantCard v-for="variant in group.variants" :key="variant.id" :variant="variant" />
+        </div>
+      </div>
     </div>
 
     <CartPanel @checkout="showPayment = true" />
