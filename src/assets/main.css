@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dcelup-red: #C61F1F;
+  --color-dcelup-redDark: #9F1414;
+  --color-dcelup-redSoft: #E35A4A;
+  --color-dcelup-cream: #F6E8D2;
+  --color-dcelup-creamSoft: #FFF8EE;
+  --color-dcelup-yellow: #F4B61C;
+  --color-dcelup-text: #40251A;
+  --color-dcelup-textSoft: #7A5B4A;
+  --color-dcelup-border: #E8D6BB;
+}
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #40251A;
+  background: #F6E8D2;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #F6E8D2;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
