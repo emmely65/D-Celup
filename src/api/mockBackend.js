@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'dcelup_mock_backend_v1'
+const STORAGE_KEY = 'dcelup_mock_backend_v2'
 const MOCK_DELAY_MS = 180
 
 const now = () => new Date()
@@ -31,18 +31,46 @@ function seedDb() {
   ]
 
   const products = [
-    { id: 1, name: 'Sempol Ayam Classic', category: 'original', description: 'Sempol ayam lembut untuk menu reguler.', is_active: true, created_at: daysAgo(18) },
-    { id: 2, name: 'Sempol Ayam Crispy', category: 'crispy', description: 'Sempol dengan balutan renyah.', is_active: true, created_at: daysAgo(16) },
-    { id: 3, name: 'Paket Mix DCelup', category: 'paket', description: 'Paket campuran untuk transaksi cepat.', is_active: true, created_at: daysAgo(14) }
+    { id: 1, name: 'Sempol Ayam Original', category: 'original', description: 'Sempol ayam original 4pcs.', is_active: true, created_at: daysAgo(18) },
+    { id: 2, name: 'Sempol Ayam Crispy', category: 'crispy', description: 'Sempol ayam crispy 5pcs.', is_active: true, created_at: daysAgo(16) },
+    { id: 3, name: 'Sempol Bakar', category: 'bakar', description: 'Sempol bakar dengan aneka saus premium.', is_active: true, created_at: daysAgo(14) },
+    { id: 4, name: 'Twin Cup', category: 'twin_cup', description: 'Dua rasa dalam satu wadah.', is_active: true, created_at: daysAgo(12) },
+    { id: 5, name: 'Sempol Jumbo', category: 'jumbo', description: 'Ukuran ekstra besar dan mantap.', is_active: true, created_at: daysAgo(10) }
   ]
 
   const productVariants = [
-    { id: 1, product_id: 1, sauce_name: 'Saus Original', type: 'original', price: 6000, qty_per_pack: 4, is_active: true, created_at: daysAgo(12) },
-    { id: 2, product_id: 1, sauce_name: 'Saus Pedas Manis', type: 'original', price: 7000, qty_per_pack: 4, is_active: true, created_at: daysAgo(12) },
-    { id: 3, product_id: 2, sauce_name: 'Saus Keju', type: 'crispy', price: 9000, qty_per_pack: 5, is_active: true, created_at: daysAgo(11) },
-    { id: 4, product_id: 2, sauce_name: 'Saus BBQ', type: 'crispy', price: 9000, qty_per_pack: 5, is_active: true, created_at: daysAgo(11) },
-    { id: 5, product_id: 3, sauce_name: 'Twin Cup Mix', type: 'twin_cup', price: 15000, qty_per_pack: 8, is_active: true, created_at: daysAgo(9) },
-    { id: 6, product_id: 3, sauce_name: 'Sempol Bakar Pedas', type: 'bakar', price: 12000, qty_per_pack: 6, is_active: true, created_at: daysAgo(8) }
+    // Original (4 pcs) - 6K
+    { id: 1, product_id: 1, sauce_name: 'Saus Barbeque Spicy', type: 'original', price: 6000, qty_per_pack: 4, is_active: true, created_at: daysAgo(12) },
+    { id: 2, product_id: 1, sauce_name: 'Saus Teriyaki', type: 'original', price: 6000, qty_per_pack: 4, is_active: true, created_at: daysAgo(12) },
+    { id: 3, product_id: 1, sauce_name: 'Saus Kacang', type: 'original', price: 6000, qty_per_pack: 4, is_active: true, created_at: daysAgo(12) },
+    { id: 4, product_id: 1, sauce_name: 'Saus Sadis', type: 'original', price: 6000, qty_per_pack: 4, is_active: true, created_at: daysAgo(12) },
+    { id: 5, product_id: 1, sauce_name: 'Saus Lada Hitam', type: 'original', price: 6000, qty_per_pack: 4, is_active: true, created_at: daysAgo(12) },
+    
+    // Crispy (5 pcs) - 7K
+    { id: 6, product_id: 2, sauce_name: 'Saus Barbeque Spicy', type: 'crispy', price: 7000, qty_per_pack: 5, is_active: true, created_at: daysAgo(11) },
+    { id: 7, product_id: 2, sauce_name: 'Saus Teriyaki', type: 'crispy', price: 7000, qty_per_pack: 5, is_active: true, created_at: daysAgo(11) },
+    { id: 8, product_id: 2, sauce_name: 'Saus Kacang', type: 'crispy', price: 7000, qty_per_pack: 5, is_active: true, created_at: daysAgo(11) },
+    { id: 9, product_id: 2, sauce_name: 'Saus Sadis', type: 'crispy', price: 7000, qty_per_pack: 5, is_active: true, created_at: daysAgo(11) },
+    { id: 10, product_id: 2, sauce_name: 'Saus Lada Hitam', type: 'crispy', price: 7000, qty_per_pack: 5, is_active: true, created_at: daysAgo(11) },
+
+    // Sempol Bakar (Harga perkiraan 12K)
+    { id: 11, product_id: 3, sauce_name: 'Saus BBQ Spicy + Mentai', type: 'bakar', price: 12000, qty_per_pack: 1, is_active: true, created_at: daysAgo(10) },
+    { id: 12, product_id: 3, sauce_name: 'Saus BBQ Spicy + Carbonara', type: 'bakar', price: 12000, qty_per_pack: 1, is_active: true, created_at: daysAgo(10) },
+    { id: 13, product_id: 3, sauce_name: 'Saus BBQ Spicy + Mayo', type: 'bakar', price: 12000, qty_per_pack: 1, is_active: true, created_at: daysAgo(10) },
+    { id: 14, product_id: 3, sauce_name: 'Saus BBQ Spicy + Garlic', type: 'bakar', price: 12000, qty_per_pack: 1, is_active: true, created_at: daysAgo(10) },
+
+    // Twin Cup (20K)
+    { id: 15, product_id: 4, sauce_name: 'Saus Teriyaki + Saus Kacang', type: 'twin_cup', price: 20000, qty_per_pack: 1, is_active: true, created_at: daysAgo(9) },
+    { id: 16, product_id: 4, sauce_name: 'Saus Lada Hitam + Saus Sadis', type: 'twin_cup', price: 20000, qty_per_pack: 1, is_active: true, created_at: daysAgo(9) },
+    { id: 17, product_id: 4, sauce_name: 'Saus BBQ Spicy + Saus Kacang', type: 'twin_cup', price: 20000, qty_per_pack: 1, is_active: true, created_at: daysAgo(9) },
+    { id: 18, product_id: 4, sauce_name: 'Saus Sadis + Lada Hitam', type: 'twin_cup', price: 20000, qty_per_pack: 1, is_active: true, created_at: daysAgo(9) },
+
+    // Sempol Jumbo (Harga perkiraan 10K)
+    { id: 19, product_id: 5, sauce_name: 'Saus Kacang', type: 'jumbo', price: 10000, qty_per_pack: 1, is_active: true, created_at: daysAgo(8) },
+    { id: 20, product_id: 5, sauce_name: 'Saus Sadis', type: 'jumbo', price: 10000, qty_per_pack: 1, is_active: true, created_at: daysAgo(8) },
+    { id: 21, product_id: 5, sauce_name: 'Saus Teriyaki', type: 'jumbo', price: 10000, qty_per_pack: 1, is_active: true, created_at: daysAgo(8) },
+    { id: 22, product_id: 5, sauce_name: 'Saus Lada Hitam', type: 'jumbo', price: 10000, qty_per_pack: 1, is_active: true, created_at: daysAgo(8) },
+    { id: 23, product_id: 5, sauce_name: 'Saus BBQ Spicy', type: 'jumbo', price: 10000, qty_per_pack: 1, is_active: true, created_at: daysAgo(8) }
   ]
 
   const rawMaterials = [
