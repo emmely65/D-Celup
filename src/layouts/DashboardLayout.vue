@@ -15,19 +15,14 @@ const router = useRouter()
 const menuItems = computed(() => [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['admin', 'kasir'] },
   { name: 'Kasir', path: '/cashier', icon: ShoppingCart, roles: ['admin', 'kasir'] },
-  { name: 'Transaksi', path: '/transactions', icon: ReceiptText, roles: ['admin', 'kasir'] },
+  { name: 'Pemasukan', path: '/transactions', icon: ReceiptText, roles: ['admin', 'kasir'] },
+  { name: 'Pengeluaran', path: '/expenses', icon: WalletCards, roles: ['admin'] },
+  // { name: 'Kategori Pengeluaran', path: '/expense-categories', icon: WalletCards, roles: ['admin'] },
+  { name: 'Laporan', path: '/reports', icon: BarChart3, roles: ['admin'] },
   { name: 'Stok Bahan', path: '/raw-materials', icon: Package, roles: ['admin', 'kasir'] },
   { name: 'Update Stok', path: '/stock/movements', icon: ScrollText, roles: ['admin', 'kasir'] },
   { name: 'Produk', path: '/products', icon: Utensils, roles: ['admin'] },
-  // BUG-19: Varian Produk pakai Layers (bukan Utensils duplikat)
   { name: 'Varian Produk', path: '/product-variants', icon: Layers, roles: ['admin'] },
-  // BUG-19: Barang Masuk/Keluar/Koreksi pakai icon yang berbeda-beda
-  // { name: 'Barang Masuk', path: '/stock/in', icon: PackagePlus, roles: ['admin'] },
-  // { name: 'Barang Keluar', path: '/stock/out', icon: PackageMinus, roles: ['admin'] },
-  // { name: 'Koreksi Stok', path: '/stock/adjustment', icon: ClipboardList, roles: ['admin'] },
-  { name: 'Pengeluaran', path: '/expenses', icon: WalletCards, roles: ['admin'] },
-  { name: 'Kategori Pengeluaran', path: '/expense-categories', icon: WalletCards, roles: ['admin'] },
-  { name: 'Laporan', path: '/reports', icon: BarChart3, roles: ['admin'] },
   { name: 'User', path: '/users', icon: Users, roles: ['admin'] },
   { name: 'Activity Log', path: '/activity-logs', icon: ScrollText, roles: ['admin'] }
 ].filter((item) => item.roles.includes(authStore.userRole)))
