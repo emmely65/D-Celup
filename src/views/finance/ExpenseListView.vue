@@ -40,7 +40,14 @@ async function fetchExpenses() {
 
 async function fetchCategories() {
   try {
-    categories.value = unwrapList(await expenseCategoryApi.getAll({ per_page: 100 }))
+    const allCategories = unwrapList(await expenseCategoryApi.getAll({ per_page: 100 }))
+    // Sesuai permintaan: tetapkan pilihan hanya 2, yaitu Bahan baku & Operasional
+    categories.value = allCategories
+      .filter(c => c.name.toLowerCase().includes('bahan baku') || c.name.toLowerCase().includes('operasional'))
+      .map(c => ({
+        ...c,
+        name: c.name.toLowerCase().includes('bahan baku') ? 'Bahan baku' : 'Operasional'
+      }))
   } catch (e) {
     uiStore.showToast('error', extractMessage(e))
   }
