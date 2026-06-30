@@ -29,8 +29,18 @@ onMounted(fetchTransactions)
 async function fetchTransactions(page = 1) {
   isLoading.value = true
   try {
-    const response = await transactionApi.getAll({ ...filters.value, page })
-    transactions.value = unwrapList(response)
+    const response = await transactionApi.getAll({ 
+      ...filters.value, 
+      page, 
+      sort: 'desc', 
+      sort_by: 'created_at', 
+      sort_dir: 'desc', 
+      order_by: 'created_at' 
+    })
+    
+    const list = unwrapList(response)
+    // Pastikan urutan selalu dari pesanan terakhir (terbaru) ke terlama
+    transactions.value = list.sort((a, b) => new Date(b.created_at || b.trx_date) - new Date(a.created_at || a.trx_date))
     meta.value = unwrapMeta(response)
   } catch (error) {
     uiStore.showToast('error', extractMessage(error))
