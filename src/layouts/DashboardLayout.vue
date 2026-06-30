@@ -22,9 +22,9 @@ const menuItems = computed(() => [
   // BUG-19: Varian Produk pakai Layers (bukan Utensils duplikat)
   { name: 'Varian Produk', path: '/product-variants', icon: Layers, roles: ['admin'] },
   // BUG-19: Barang Masuk/Keluar/Koreksi pakai icon yang berbeda-beda
-  { name: 'Barang Masuk', path: '/stock/in', icon: PackagePlus, roles: ['admin'] },
-  { name: 'Barang Keluar', path: '/stock/out', icon: PackageMinus, roles: ['admin'] },
-  { name: 'Koreksi Stok', path: '/stock/adjustment', icon: ClipboardList, roles: ['admin'] },
+  // { name: 'Barang Masuk', path: '/stock/in', icon: PackagePlus, roles: ['admin'] },
+  // { name: 'Barang Keluar', path: '/stock/out', icon: PackageMinus, roles: ['admin'] },
+  // { name: 'Koreksi Stok', path: '/stock/adjustment', icon: ClipboardList, roles: ['admin'] },
   { name: 'Expense', path: '/expenses', icon: WalletCards, roles: ['admin'] },
   { name: 'Kategori Expense', path: '/expense-categories', icon: WalletCards, roles: ['admin'] },
   { name: 'Laporan', path: '/reports', icon: BarChart3, roles: ['admin'] },

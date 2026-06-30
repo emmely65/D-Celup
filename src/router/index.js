@@ -35,9 +35,9 @@ const routes = [
 
   { path: '/products', name: 'products', component: ProductListView, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/product-variants', name: 'product-variants', component: ProductVariantListView, meta: { requiresAuth: true, roles: ['admin'] } },
-  { path: '/stock/in', name: 'stock-in', component: StockInView, meta: { requiresAuth: true, roles: ['admin'] } },
-  { path: '/stock/out', name: 'stock-out', component: StockOutView, meta: { requiresAuth: true, roles: ['admin'] } },
-  { path: '/stock/adjustment', name: 'stock-adjustment', component: StockAdjustmentView, meta: { requiresAuth: true, roles: ['admin'] } },
+  // { path: '/stock/in', name: 'stock-in', component: StockInView, meta: { requiresAuth: true, roles: ['admin'] } },
+  // { path: '/stock/out', name: 'stock-out', component: StockOutView, meta: { requiresAuth: true, roles: ['admin'] } },
+  // { path: '/stock/adjustment', name: 'stock-adjustment', component: StockAdjustmentView, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/expenses', name: 'expenses', component: ExpenseListView, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/expense-categories', name: 'expense-categories', component: ExpenseCategoryView, meta: { requiresAuth: true, roles: ['admin'] } },
   { path: '/reports', name: 'reports', component: ReportView, meta: { requiresAuth: true, roles: ['admin'] } },
