@@ -17,7 +17,7 @@ const menuItems = computed(() => [
   { name: 'Kasir', path: '/cashier', icon: ShoppingCart, roles: ['admin', 'kasir'] },
   { name: 'Transaksi', path: '/transactions', icon: ReceiptText, roles: ['admin', 'kasir'] },
   { name: 'Stok Bahan', path: '/raw-materials', icon: Package, roles: ['admin', 'kasir'] },
-  { name: 'Riwayat Stok', path: '/stock/movements', icon: ScrollText, roles: ['admin', 'kasir'] },
+  { name: 'Update Stok', path: '/stock/movements', icon: ScrollText, roles: ['admin', 'kasir'] },
   { name: 'Produk', path: '/products', icon: Utensils, roles: ['admin'] },
   // BUG-19: Varian Produk pakai Layers (bukan Utensils duplikat)
   { name: 'Varian Produk', path: '/product-variants', icon: Layers, roles: ['admin'] },
