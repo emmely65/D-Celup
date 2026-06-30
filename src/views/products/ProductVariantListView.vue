@@ -18,6 +18,9 @@ const products = ref([])
 const variants = ref([])
 const form = reactive({ product_id: '', sauce_name: '', type: 'original', price: 6000, qty_per_pack: 4, is_active: true })
 
+const editId = ref(null)
+const editForm = reactive({ sauce_name: '', price: 0, qty_per_pack: 0 })
+
 onMounted(async () => { await Promise.all([fetchProducts(), fetchVariants()]) })
 async function fetchProducts() { products.value = unwrapList(await productApi.getAll({ per_page: 100 })) }
 async function fetchVariants() { variants.value = unwrapList(await productVariantApi.getAll({ per_page: 100 })) }
@@ -30,6 +33,31 @@ async function createVariant() {
     await fetchVariants()
   } catch (e) { uiStore.showToast('error', extractMessage(e)) }
 }
+
+function startEdit(variant) {
+  editId.value = variant.id
+  Object.assign(editForm, {
+    sauce_name: variant.sauce_name,
+    price: variant.price,
+    qty_per_pack: variant.qty_per_pack
+  })
+}
+
+function cancelEdit() {
+  editId.value = null
+}
+
+async function updateVariant(id) {
+  try {
+    await productVariantApi.update(id, { ...editForm, price: Number(editForm.price), qty_per_pack: Number(editForm.qty_per_pack) })
+    uiStore.showToast('success', 'Varian berhasil diupdate')
+    editId.value = null
+    await fetchVariants()
+  } catch (e) {
+    uiStore.showToast('error', extractMessage(e))
+  }
+}
+
 async function deactivate(id) {
   if (!confirm('Hapus varian ini?')) return
   try { await productVariantApi.deactivate(id); uiStore.showToast('success', 'Varian berhasil dihapus'); await fetchVariants() }
@@ -56,9 +84,31 @@ async function deactivate(id) {
     <section class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
       <EmptyState v-if="!variants.length" title="Varian kosong" />
       <article v-for="variant in variants" :key="variant.id" class="rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
-        <p class="font-black text-dcelup-red">{{ variant.sauce_name }}</p>
-        <p class="text-sm text-dcelup-textSoft">{{ variant.product?.name }} · {{ variant.type }} · {{ variant.qty_per_pack }} pcs</p>
-        <div class="mt-3 flex items-center justify-between"><span class="rounded-full bg-dcelup-yellow px-3 py-1 font-black">{{ formatRupiah(variant.price) }}</span><BaseButton variant="secondary" @click="deactivate(variant.id)">Hapus</BaseButton></div>
+        
+        <div v-if="editId === variant.id" class="space-y-3">
+          <BaseInput v-model="editForm.sauce_name" label="Saus" />
+          <div class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="editForm.price" type="number" label="Harga" />
+            <BaseInput v-model="editForm.qty_per_pack" type="number" label="Qty/pack" />
+          </div>
+          <div class="flex gap-2 pt-2">
+            <BaseButton @click="updateVariant(variant.id)" class="flex-1">Simpan</BaseButton>
+            <BaseButton variant="secondary" @click="cancelEdit" class="flex-1">Batal</BaseButton>
+          </div>
+        </div>
+
+        <div v-else>
+          <p class="font-black text-dcelup-red">{{ variant.sauce_name }}</p>
+          <p class="text-sm text-dcelup-textSoft">{{ variant.product?.name }} · {{ variant.type }} · {{ variant.qty_per_pack }} pcs</p>
+          <div class="mt-3 flex items-center justify-between gap-2">
+            <span class="rounded-full bg-dcelup-yellow px-3 py-1 font-black">{{ formatRupiah(variant.price) }}</span>
+            <div class="flex gap-2">
+              <BaseButton variant="accent" @click="startEdit(variant)">Edit</BaseButton>
+              <BaseButton variant="secondary" @click="deactivate(variant.id)">Hapus</BaseButton>
+            </div>
+          </div>
+        </div>
+
       </article>
     </section>
   </DashboardLayout>
