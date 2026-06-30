@@ -99,8 +99,9 @@ async function logout() {
             <Menu class="h-5 w-5" />
           </button>
           <div class="min-w-0 flex-1">
-            <!-- Header greeting and title removed as requested -->
+            <slot name="header-text"></slot>
           </div>
+          <slot name="header-actions"></slot>
         </div>
       </header>
 

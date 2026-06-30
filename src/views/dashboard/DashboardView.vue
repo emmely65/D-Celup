@@ -26,13 +26,13 @@ const cashierSummary = computed(() => dashboardStore.cashierSummary ?? {})
 
 <template>
   <DashboardLayout>
-    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
-      <div>
-        <h1 class="text-2xl font-black text-dcelup-text">Dashboard</h1>
-        <p class="text-sm text-dcelup-textSoft">Ringkasan usaha D'Celup hari ini.</p>
-      </div>
+    <template #header-text>
+      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Dashboard</h1>
+      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Ringkasan usaha D'Celup hari ini.</p>
+    </template>
+    <template #header-actions>
       <BaseButton variant="secondary" :loading="dashboardStore.isLoading" @click="refreshDashboard">Refresh</BaseButton>
-    </div>
+    </template>
 
     <div v-if="authStore.isAdmin" class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       <KpiCard title="Pemasukan Hari Ini" :value="formatRupiah(adminSummary.total_income ?? adminSummary.total_sales ?? 0)" :caption="LABEL_PEMASUKAN" />
