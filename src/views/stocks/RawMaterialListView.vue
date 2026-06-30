@@ -39,8 +39,10 @@ async function deactivate(id) {
 
 <template>
   <DashboardLayout>
-    <h1 class="text-2xl font-black">Stok Bahan</h1>
-    <p class="text-sm text-dcelup-textSoft">Kasir hanya melihat stok. Admin dapat menambah dan menonaktifkan bahan.</p>
+    <template #header-text>
+      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Stok Bahan</h1>
+      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Kasir hanya melihat stok. Admin dapat menambah dan menonaktifkan bahan.</p>
+    </template>
 
     <section v-if="authStore.isAdmin" class="mt-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
       <h2 class="font-black">Tambah Bahan</h2>

@@ -48,7 +48,9 @@ async function deactivate(id) {
 
 <template>
   <DashboardLayout>
-    <h1 class="text-2xl font-black">Kategori Pengeluaran</h1>
+    <template #header-text>
+      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Kategori Pengeluaran</h1>
+    </template>
     <section class="mt-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
       <div class="flex gap-2"><BaseInput v-model="form.name" label="Nama kategori" /><BaseButton class="self-end" @click="createCategory">Simpan</BaseButton></div>
       <div class="mt-4 space-y-2">

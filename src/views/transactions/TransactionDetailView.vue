@@ -32,13 +32,13 @@ onMounted(async () => {
 
 <template>
   <DashboardLayout>
+    <template #header-text>
+      <h1 class="truncate text-lg font-extrabold text-dcelup-red">{{ transaction?.trx_code ?? `#${transaction?.id}` }}</h1>
+      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block" v-if="transaction">{{ formatDateTime(transaction.created_at ?? transaction.trx_date) }}</p>
+    </template>
     <LoadingBlock v-if="isLoading" />
     <section v-else-if="transaction" class="rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-5">
-      <div class="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 class="text-2xl font-black text-dcelup-red">{{ transaction.trx_code ?? `#${transaction.id}` }}</h1>
-          <p class="text-sm text-dcelup-textSoft">{{ formatDateTime(transaction.created_at ?? transaction.trx_date) }}</p>
-        </div>
+      <div class="flex flex-wrap items-start justify-end gap-3">
         <span class="rounded-full border px-3 py-1 text-sm font-bold" :class="TRANSACTION_STATUS_CONFIG[transaction.status]?.class">
           {{ TRANSACTION_STATUS_CONFIG[transaction.status]?.label ?? transaction.status }}
         </span>

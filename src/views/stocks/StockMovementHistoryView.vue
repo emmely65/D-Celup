@@ -30,7 +30,9 @@ onMounted(async () => {
 
 <template>
   <DashboardLayout>
-    <h1 class="text-2xl font-black">Riwayat Mutasi Stok</h1>
+    <template #header-text>
+      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Riwayat Mutasi Stok</h1>
+    </template>
     <section class="mt-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
       <LoadingBlock v-if="isLoading" />
       <template v-else>

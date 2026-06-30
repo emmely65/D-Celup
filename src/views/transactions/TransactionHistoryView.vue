@@ -63,11 +63,12 @@ async function submitCancel(payload) {
 
 <template>
   <DashboardLayout>
+    <template #header-text>
+      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Riwayat Transaksi</h1>
+      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Pantau transaksi dan pembatalan.</p>
+    </template>
+    
     <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <div class="min-w-0">
-        <h1 class="text-2xl font-black">Riwayat Transaksi</h1>
-        <p class="text-sm text-dcelup-textSoft">Pantau transaksi dan pembatalan.</p>
-      </div>
       <div class="grid w-full gap-2 sm:grid-cols-[1fr_1fr_auto] lg:w-auto">
         <input v-model="filters.date_from" type="date" class="min-h-11 rounded-xl border border-dcelup-border px-3" />
         <input v-model="filters.date_to" type="date" class="min-h-11 rounded-xl border border-dcelup-border px-3" />

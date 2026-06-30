@@ -39,7 +39,9 @@ async function deactivate(id) {
 
 <template>
   <DashboardLayout>
-    <h1 class="text-2xl font-black">Produk</h1>
+    <template #header-text>
+      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Produk</h1>
+    </template>
     <section class="mt-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
       <h2 class="font-black">Tambah Produk</h2>
       <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

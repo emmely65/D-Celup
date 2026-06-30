@@ -32,8 +32,10 @@ async function download(type) {
 
 <template>
   <DashboardLayout>
-    <h1 class="text-2xl font-black">Laporan</h1>
-    <p class="text-sm text-dcelup-textSoft">Gunakan label {{ LABEL_SELISIH_KAS }} untuk membaca laporan kas.</p>
+    <template #header-text>
+      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Laporan</h1>
+      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Gunakan label {{ LABEL_SELISIH_KAS }} untuk membaca laporan kas.</p>
+    </template>
     <section class="mt-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
       <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <label><span class="mb-1 block text-sm font-bold">Dari</span><input v-model="filters.date_from" type="date" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3" /></label>

@@ -82,13 +82,13 @@ async function submitTransaction() {
 
 <template>
   <DashboardLayout>
-    <div class="mb-4 flex flex-wrap items-end justify-between gap-2">
-      <div>
-        <h1 class="text-2xl font-black text-dcelup-text">Kasir</h1>
-        <p class="text-sm text-dcelup-textSoft">Target transaksi cepat: pilih menu, cek total, simpan.</p>
-      </div>
+    <template #header-text>
+      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Kasir</h1>
+      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Target transaksi cepat: pilih menu, cek total, simpan.</p>
+    </template>
+    <template #header-actions>
       <span class="rounded-full bg-white px-3 py-1 text-xs font-bold text-dcelup-textSoft">{{ filteredVariants.length }} menu</span>
-    </div>
+    </template>
 
     <div class="mb-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-3 text-sm font-semibold leading-relaxed text-dcelup-textSoft">
       Info: stok bahan tidak berkurang otomatis dari transaksi. Stok dikelola manual oleh admin.
