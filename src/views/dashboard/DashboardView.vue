@@ -22,6 +22,14 @@ async function refreshDashboard() {
 
 const adminSummary = computed(() => dashboardStore.adminSummary ?? {})
 const cashierSummary = computed(() => dashboardStore.cashierSummary ?? {})
+
+function getItemName(item) {
+  const variant = item.product_variant ?? item.variant
+  const productName = variant?.product?.name ?? item.product_name
+  const sauceName = variant?.sauce_name ?? item.name ?? item.sauce_name
+  if (productName && sauceName) return `${productName} - ${sauceName}`
+  return sauceName ?? productName ?? 'Produk'
+}
 </script>
 
 <template>
@@ -55,7 +63,7 @@ const cashierSummary = computed(() => dashboardStore.cashierSummary ?? {})
       <h2 class="font-extrabold">Top Produk</h2>
       <div class="mt-3 grid gap-2 md:grid-cols-2 lg:grid-cols-3">
         <div v-for="item in dashboardStore.topProducts" :key="item.product_variant_id ?? item.id" class="rounded-xl bg-white p-3">
-          <p class="font-bold">{{ item.name ?? item.sauce_name ?? 'Produk' }}</p>
+          <p class="font-bold">{{ getItemName(item) }}</p>
           <p class="text-sm text-dcelup-textSoft">Terjual: {{ item.total_qty ?? item.qty ?? 0 }}</p>
         </div>
         <p v-if="!dashboardStore.topProducts.length" class="text-sm text-dcelup-textSoft">Belum ada data produk terlaris.</p>
