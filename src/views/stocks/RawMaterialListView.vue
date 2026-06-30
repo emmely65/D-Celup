@@ -67,8 +67,8 @@ async function updateMaterial(id) {
 }
 
 async function deactivate(id) {
-  if (!confirm('Nonaktifkan bahan ini?')) return
-  try { await rawMaterialApi.deactivate(id); uiStore.showToast('success', 'Bahan dinonaktifkan'); await fetchMaterials() }
+  if (!confirm('Hapus bahan ini?')) return
+  try { await rawMaterialApi.deactivate(id); uiStore.showToast('success', 'Bahan berhasil dihapus'); await fetchMaterials() }
   catch (e) { uiStore.showToast('error', extractMessage(e)) }
 }
 </script>
@@ -77,7 +77,7 @@ async function deactivate(id) {
   <DashboardLayout>
     <template #header-text>
       <h1 class="truncate text-lg font-extrabold text-dcelup-text">Stok Bahan</h1>
-      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Kasir hanya melihat stok. Admin dapat menambah dan menonaktifkan bahan.</p>
+      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Kasir hanya melihat stok. Admin dapat menambah dan menghapus bahan.</p>
     </template>
 
     <section v-if="authStore.isAdmin" class="mt-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
@@ -115,7 +115,7 @@ async function deactivate(id) {
           </div>
           <div v-if="authStore.isAdmin" class="mt-3 flex gap-2">
             <BaseButton variant="accent" @click="startEdit(item)">Edit</BaseButton>
-            <BaseButton variant="secondary" @click="deactivate(item.id)">Nonaktifkan</BaseButton>
+            <BaseButton variant="secondary" @click="deactivate(item.id)">Hapus</BaseButton>
           </div>
         </div>
 

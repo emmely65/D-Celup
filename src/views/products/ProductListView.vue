@@ -31,8 +31,8 @@ async function createProduct() {
   } catch (e) { uiStore.showToast('error', extractMessage(e)) }
 }
 async function deactivate(id) {
-  if (!confirm('Nonaktifkan produk ini?')) return
-  try { await productApi.deactivate(id); uiStore.showToast('success', 'Produk dinonaktifkan'); await fetchProducts() }
+  if (!confirm('Hapus produk ini?')) return
+  try { await productApi.deactivate(id); uiStore.showToast('success', 'Produk berhasil dihapus'); await fetchProducts() }
   catch (e) { uiStore.showToast('error', extractMessage(e)) }
 }
 </script>
@@ -55,7 +55,7 @@ async function deactivate(id) {
       <EmptyState v-if="!products.length" title="Produk kosong" />
       <div v-for="product in products" :key="product.id" class="flex flex-wrap items-center justify-between gap-3 border-b border-dcelup-border py-3 last:border-0">
         <div><p class="font-black">{{ product.name }}</p><p class="text-sm text-dcelup-textSoft">{{ product.category }} · {{ product.description }}</p></div>
-        <BaseButton variant="secondary" @click="deactivate(product.id)">Nonaktifkan</BaseButton>
+        <BaseButton variant="secondary" @click="deactivate(product.id)">Hapus</BaseButton>
       </div>
     </section>
   </DashboardLayout>

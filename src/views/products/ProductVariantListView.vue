@@ -31,8 +31,8 @@ async function createVariant() {
   } catch (e) { uiStore.showToast('error', extractMessage(e)) }
 }
 async function deactivate(id) {
-  if (!confirm('Nonaktifkan varian ini?')) return
-  try { await productVariantApi.deactivate(id); uiStore.showToast('success', 'Varian dinonaktifkan'); await fetchVariants() }
+  if (!confirm('Hapus varian ini?')) return
+  try { await productVariantApi.deactivate(id); uiStore.showToast('success', 'Varian berhasil dihapus'); await fetchVariants() }
   catch (e) { uiStore.showToast('error', extractMessage(e)) }
 }
 </script>
@@ -58,7 +58,7 @@ async function deactivate(id) {
       <article v-for="variant in variants" :key="variant.id" class="rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
         <p class="font-black text-dcelup-red">{{ variant.sauce_name }}</p>
         <p class="text-sm text-dcelup-textSoft">{{ variant.product?.name }} · {{ variant.type }} · {{ variant.qty_per_pack }} pcs</p>
-        <div class="mt-3 flex items-center justify-between"><span class="rounded-full bg-dcelup-yellow px-3 py-1 font-black">{{ formatRupiah(variant.price) }}</span><BaseButton variant="secondary" @click="deactivate(variant.id)">Nonaktifkan</BaseButton></div>
+        <div class="mt-3 flex items-center justify-between"><span class="rounded-full bg-dcelup-yellow px-3 py-1 font-black">{{ formatRupiah(variant.price) }}</span><BaseButton variant="secondary" @click="deactivate(variant.id)">Hapus</BaseButton></div>
       </article>
     </section>
   </DashboardLayout>
