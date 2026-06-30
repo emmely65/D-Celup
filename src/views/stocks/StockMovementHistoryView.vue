@@ -79,7 +79,7 @@ onMounted(async () => {
         <EmptyState v-if="!movements.length" title="Belum ada mutasi stok" />
         <div v-for="m in movements" :key="m.id" class="grid gap-2 border-b border-dcelup-border py-3 last:border-0 xl:grid-cols-6 xl:items-center">
           <span class="font-black">{{ m.raw_material?.name ?? m.material?.name ?? '-' }}</span>
-          <span class="rounded-full bg-dcelup-cream px-2 py-1 text-xs font-bold uppercase">{{ m.type }}</span>
+          <span class="text-sm font-semibold text-dcelup-textSoft">Oleh: {{ m.user?.name ?? 'Admin/Kasir' }}</span>
           <span>Qty {{ m.qty }}</span>
           <span>{{ m.balance_before }} → {{ m.balance_after }}</span>
           <span class="truncate text-sm text-dcelup-textSoft" :title="m.note">{{ m.note || '-' }}</span>
