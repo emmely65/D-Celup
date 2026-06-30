@@ -1334,7 +1334,8 @@ function withStockRelations(movement) {
   return {
     ...clone(movement),
     raw_material: withIdentity(findById(db.rawMaterials, movement.raw_material_id ?? movement.material_id)),
-    material: withIdentity(findById(db.rawMaterials, movement.raw_material_id ?? movement.material_id))
+    material: withIdentity(findById(db.rawMaterials, movement.raw_material_id ?? movement.material_id)),
+    user: publicUser(findById(db.users, movement.user_id) || movement.user)
   }
 }
 
