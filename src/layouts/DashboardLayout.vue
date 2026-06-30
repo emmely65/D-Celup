@@ -58,11 +58,14 @@ async function logout() {
       class="fixed inset-y-0 left-0 z-40 w-72 max-w-[86vw] transform bg-dcelup-red text-white shadow-xl transition-transform md:w-56 md:translate-x-0 lg:w-64 xl:w-72"
       :class="uiStore.sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
-      <div class="flex items-center gap-3 border-b border-white/20 px-5 py-4">
-        <img :src="logo" alt="Logo D'Celup" class="h-12 w-12 rounded-full bg-white object-cover" />
-        <div>
-          <p class="font-extrabold leading-tight">D'Celup</p>
-          <p class="text-xs text-white/80">Sempol Ayam</p>
+      <div class="flex items-center gap-3 border-b border-white/20 px-4 py-4">
+        <img :src="logo" alt="Logo D'Celup" class="h-11 w-11 shrink-0 rounded-full bg-white object-cover shadow-sm" />
+        <div class="flex-1 min-w-0">
+          <p class="truncate font-extrabold leading-tight text-white">D'Celup</p>
+          <p class="truncate text-[11px] font-medium text-white/80">Sempol Ayam</p>
+        </div>
+        <div class="shrink-0 rounded-md bg-white/20 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-sm border border-white/30 shadow-sm">
+          {{ authStore.userRole }}
         </div>
       </div>
 
@@ -96,10 +99,8 @@ async function logout() {
             <Menu class="h-5 w-5" />
           </button>
           <div class="min-w-0 flex-1">
-            <p class="text-sm text-dcelup-textSoft">Halo, {{ authStore.userName || 'User' }}</p>
-            <h1 class="truncate text-base font-extrabold sm:text-lg">{{ route.meta.title || 'D\'Celup Sempol Ayam' }}</h1>
+            <!-- Header greeting and title removed as requested -->
           </div>
-          <span class="shrink-0 rounded-full bg-dcelup-yellow px-3 py-1 text-xs font-bold uppercase text-dcelup-text">{{ authStore.userRole }}</span>
         </div>
       </header>
 
