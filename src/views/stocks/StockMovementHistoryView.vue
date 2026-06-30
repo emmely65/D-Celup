@@ -82,7 +82,7 @@ onMounted(async () => {
           <span class="rounded-full bg-dcelup-cream px-2 py-1 text-xs font-bold uppercase">{{ m.type }}</span>
           <span>Qty {{ m.qty }}</span>
           <span>{{ m.balance_before }} → {{ m.balance_after }}</span>
-          <span>{{ formatRupiah(m.total_price) }}</span>
+          <span class="truncate text-sm text-dcelup-textSoft" :title="m.note">{{ m.note || '-' }}</span>
           <span class="text-sm text-dcelup-textSoft">{{ formatDateTime(m.created_at ?? m.movement_date) }}</span>
         </div>
       </template>
