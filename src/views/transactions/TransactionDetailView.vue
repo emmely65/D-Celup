@@ -28,6 +28,15 @@ onMounted(async () => {
     isLoading.value = false
   }
 })
+
+function getItemName(item) {
+  const variant = item.product_variant ?? item.variant
+  if (!variant) return 'Item'
+  const productName = variant.product?.name
+  const sauceName = variant.sauce_name
+  if (productName && sauceName) return `${productName} - ${sauceName}`
+  return sauceName ?? productName ?? 'Item'
+}
 </script>
 
 <template>
@@ -54,7 +63,7 @@ onMounted(async () => {
       <div class="mt-3 space-y-2">
         <div v-for="item in transaction.items ?? transaction.transaction_items ?? []" :key="item.id" class="flex justify-between rounded-xl bg-white p-3">
           <div>
-            <p class="font-bold">{{ item.product_variant?.sauce_name ?? item.variant?.sauce_name ?? 'Item' }}</p>
+            <p class="font-bold">{{ getItemName(item) }}</p>
             <p class="text-xs text-dcelup-textSoft">Qty {{ item.qty }} x {{ formatRupiah(item.unit_price) }}</p>
           </div>
           <p class="font-black">{{ formatRupiah(item.subtotal) }}</p>
