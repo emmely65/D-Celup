@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js'
 import { useAuthStore } from '@/stores/authStore'
@@ -14,6 +14,13 @@ const dashboardStore = useDashboardStore()
 const loadData = async () => {
   await dashboardStore.fetchWeeklySales()
 }
+
+watch(
+  () => [dashboardStore.chartStartDate, dashboardStore.chartEndDate],
+  () => {
+    loadData()
+  }
+)
 
 onMounted(() => {
   // If not yet loaded, load it. DashboardView usually loads it but we have our own period state now.
@@ -90,13 +97,13 @@ const options = {
     <div class="mb-4 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
       <h2 class="font-extrabold text-dcelup-text">Grafik Penjualan</h2>
       <div class="flex items-center gap-2">
-        <input type="date" v-model="dashboardStore.chartStartDate" @change="loadData" class="rounded-lg border border-dcelup-border bg-white px-3 py-1.5 text-sm font-medium text-dcelup-text outline-none focus:border-dcelup-red">
+        <input type="date" v-model="dashboardStore.chartStartDate" class="rounded-lg border border-dcelup-border bg-white px-3 py-1.5 text-sm font-medium text-dcelup-text outline-none focus:border-dcelup-red">
         <span class="text-sm font-medium text-dcelup-textSoft">-</span>
-        <input type="date" v-model="dashboardStore.chartEndDate" @change="loadData" class="rounded-lg border border-dcelup-border bg-white px-3 py-1.5 text-sm font-medium text-dcelup-text outline-none focus:border-dcelup-red">
+        <input type="date" v-model="dashboardStore.chartEndDate" class="rounded-lg border border-dcelup-border bg-white px-3 py-1.5 text-sm font-medium text-dcelup-text outline-none focus:border-dcelup-red">
       </div>
     </div>
     <div class="h-64">
-      <Bar :data="chartData" :options="options" />
+      <Bar :key="dashboardStore.chartStartDate + dashboardStore.chartEndDate" :data="chartData" :options="options" />
     </div>
   </section>
 </template>
