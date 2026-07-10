@@ -10,10 +10,9 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
 const authStore = useAuthStore()
 const dashboardStore = useDashboardStore()
-const period = ref('weekly')
 
 const loadData = async () => {
-  await dashboardStore.fetchWeeklySales({ period: period.value })
+  await dashboardStore.fetchWeeklySales()
 }
 
 onMounted(() => {
@@ -88,12 +87,13 @@ const options = {
 
 <template>
   <section class="rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
-    <div class="mb-4 flex items-center justify-between">
+    <div class="mb-4 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
       <h2 class="font-extrabold text-dcelup-text">Grafik Penjualan</h2>
-      <select v-model="period" @change="loadData" class="rounded-lg border border-dcelup-border bg-white px-3 py-1.5 text-sm font-medium text-dcelup-text outline-none focus:border-dcelup-red">
-        <option value="weekly">Mingguan</option>
-        <option value="monthly">Bulanan</option>
-      </select>
+      <div class="flex items-center gap-2">
+        <input type="date" v-model="dashboardStore.chartStartDate" @change="loadData" class="rounded-lg border border-dcelup-border bg-white px-3 py-1.5 text-sm font-medium text-dcelup-text outline-none focus:border-dcelup-red">
+        <span class="text-sm font-medium text-dcelup-textSoft">-</span>
+        <input type="date" v-model="dashboardStore.chartEndDate" @change="loadData" class="rounded-lg border border-dcelup-border bg-white px-3 py-1.5 text-sm font-medium text-dcelup-text outline-none focus:border-dcelup-red">
+      </div>
     </div>
     <div class="h-64">
       <Bar :data="chartData" :options="options" />

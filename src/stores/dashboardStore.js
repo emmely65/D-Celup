@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { dashboardApi } from '@/api/dashboardApi'
+import dayjs from 'dayjs'
 
 export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
@@ -8,7 +9,9 @@ export const useDashboardStore = defineStore('dashboard', {
     weeklySales: [],
     topProducts: [],
     lowStockMaterials: [],
-    isLoading: false
+    isLoading: false,
+    chartStartDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
+    chartEndDate: dayjs().format('YYYY-MM-DD')
   }),
 
   getters: {
@@ -38,7 +41,12 @@ export const useDashboardStore = defineStore('dashboard', {
 
     async fetchWeeklySales(params = {}) {
       try {
-        const res = await dashboardApi.getWeeklySales(params)
+        const query = {
+          start_date: this.chartStartDate,
+          end_date: this.chartEndDate,
+          ...params
+        }
+        const res = await dashboardApi.getWeeklySales(query)
         this.weeklySales = res.data.data ?? []
       } catch (e) {
         console.error('[DashboardStore] fetchWeeklySales gagal:', e)
