@@ -47,27 +47,8 @@ export const useDashboardStore = defineStore('dashboard', {
           ...params
         }
         
-        // --- MENGGUNAKAN DUMMY DATA SEMENTARA ---
-        const dummyData = []
-        let current = dayjs(query.start_date)
-        const end = dayjs(query.end_date)
-        
-        // Generate data dummy setiap hari dari start sampai end
-        while (current.isBefore(end) || current.isSame(end, 'day')) {
-          dummyData.push({
-            date: current.format('DD MMM YYYY'),
-            total_income: Math.floor(Math.random() * 500000) + 100000,
-            total_expense: Math.floor(Math.random() * 200000) + 50000,
-          })
-          current = current.add(1, 'day')
-        }
-        
-        this.weeklySales = dummyData
-        // ------------------------------------------
-
-        // KODE ASLI (dinonaktifkan sementara)
-        // const res = await dashboardApi.getWeeklySales(query)
-        // this.weeklySales = res.data.data ?? []
+        const res = await dashboardApi.getWeeklySales(query)
+        this.weeklySales = res.data.data ?? []
       } catch (e) {
         console.error('[DashboardStore] fetchWeeklySales gagal:', e)
       }
