@@ -32,11 +32,22 @@ async function fetchCustom() {
     ])
     report.value = reportRes.data.data
     
-    // Sort dari yang terbaru
-    const trxList = unwrapList(trxRes)
+    const fromStr = filters.date_from
+    const toStr = filters.date_to
+
+    // Manual filter & sort untuk transaksi
+    const trxList = unwrapList(trxRes).filter(trx => {
+      const dateStr = (trx.created_at || trx.trx_date || '').substring(0, 10)
+      return dateStr >= fromStr && dateStr <= toStr
+    })
     transactions.value = trxList.sort((a, b) => new Date(b.created_at || b.trx_date) - new Date(a.created_at || a.trx_date))
     
-    expenses.value = unwrapList(expRes)
+    // Manual filter & sort untuk pengeluaran
+    const expList = unwrapList(expRes).filter(exp => {
+      const dateStr = (exp.expense_date || '').substring(0, 10)
+      return dateStr >= fromStr && dateStr <= toStr
+    })
+    expenses.value = expList.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date))
   }
   catch (e) { uiStore.showToast('error', extractMessage(e)) }
   finally { isLoading.value = false }
