@@ -46,7 +46,7 @@ function getItemName(item) {
       <KpiCard title="Pemasukan Hari Ini" :value="formatRupiah(adminSummary.total_income ?? adminSummary.total_sales ?? 0)" :caption="LABEL_PEMASUKAN" />
       <KpiCard title="Pengeluaran Hari Ini" :value="formatRupiah(adminSummary.total_expense ?? adminSummary.total_expenses ?? 0)" :caption="LABEL_PENGELUARAN" tone="yellow" />
       <KpiCard :title="LABEL_SELISIH_KAS" :value="formatRupiah(adminSummary.cash_difference ?? adminSummary.estimated_cash_difference ?? 0)" caption="Bukan laba bersih formal" />
-      <KpiCard title="Transaksi" :value="adminSummary.total_transactions ?? 0" caption="Hari ini" />
+      <KpiCard title="Transaksi" :value="adminSummary.total_transactions ?? adminSummary.transaction_count ?? 0" caption="Hari ini" />
     </div>
 
     <div v-else class="grid gap-4 md:grid-cols-2">
