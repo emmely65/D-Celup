@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import KpiCard from '@/components/dashboard/KpiCard.vue'
@@ -58,6 +58,10 @@ async function download(type) {
     downloadBlob(response.data, `laporan-dcelup-${filters.date_from}-${filters.date_to}.${type === 'pdf' ? 'pdf' : 'xlsx'}`)
   } catch (e) { uiStore.showToast('error', extractMessage(e)) }
 }
+
+onMounted(() => {
+  fetchCustom()
+})
 </script>
 
 <template>
@@ -75,9 +79,9 @@ async function download(type) {
       </div>
     </section>
     <div class="mt-4 grid gap-4 md:grid-cols-3">
-      <KpiCard :title="LABEL_PEMASUKAN" :value="formatRupiah(report?.total_income ?? report?.total_sales ?? 0)" />
-      <KpiCard :title="LABEL_PENGELUARAN" :value="formatRupiah(report?.total_expense ?? report?.total_expenses ?? 0)" />
-      <KpiCard :title="LABEL_SELISIH_KAS" :value="formatRupiah(report?.cash_difference ?? report?.estimated_cash_difference ?? 0)" caption="Bukan laporan laba rugi formal" />
+      <KpiCard :title="LABEL_PEMASUKAN" :value="formatRupiah(report?.summary?.total_income ?? report?.summary?.total_sales ?? 0)" />
+      <KpiCard :title="LABEL_PENGELUARAN" :value="formatRupiah(report?.summary?.total_expense ?? report?.summary?.total_expenses ?? 0)" />
+      <KpiCard :title="LABEL_SELISIH_KAS" :value="formatRupiah(report?.summary?.cash_difference ?? report?.summary?.estimated_cash_difference ?? 0)" caption="Bukan laporan laba rugi formal" />
     </div>
 
     <!-- Detail Pemasukan & Pengeluaran -->
