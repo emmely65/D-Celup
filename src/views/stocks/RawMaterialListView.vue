@@ -29,7 +29,7 @@ function getStockStatus(current, min) {
 }
 
 async function fetchMaterials() {
-  try { materials.value = unwrapList(await rawMaterialApi.getAll({ per_page: 100 })) }
+  try { materials.value = unwrapList(await rawMaterialApi.getAll({ per_page: 100, is_active: 1 })) }
   catch (e) { uiStore.showToast('error', extractMessage(e)) }
 }
 async function createMaterial() {
