@@ -17,7 +17,7 @@ const menuItems = computed(() => [
   { name: 'Kasir', path: '/cashier', icon: ShoppingCart, roles: ['admin', 'kasir'] },
   { name: 'Pemasukan', path: '/transactions', icon: ReceiptText, roles: ['admin', 'kasir'] },
   { name: 'Pengeluaran', path: '/expenses', icon: WalletCards, roles: ['admin'] },
-  { name: 'Kategori Pengeluaran', path: '/expense-categories', icon: WalletCards, roles: ['admin'] },
+  // { name: 'Kategori Pengeluaran', path: '/expense-categories', icon: WalletCards, roles: ['admin'] },
   { name: 'Laporan', path: '/reports', icon: BarChart3, roles: ['admin'] },
   { name: 'Stok Bahan', path: '/raw-materials', icon: Package, roles: ['admin', 'kasir'] },
   { name: 'Update Stok', path: '/stock/movements', icon: ScrollText, roles: ['admin', 'kasir'] },
