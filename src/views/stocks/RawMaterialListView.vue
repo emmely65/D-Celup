@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useUiStore } from '@/stores/uiStore'
 import { useApiError } from '@/composables/useApiError'
 import { unwrapList } from '@/utils/normalizer'
+import { formatNumber } from '@/utils/number'
 
 const authStore = useAuthStore()
 const uiStore = useUiStore()
@@ -110,7 +111,7 @@ async function deactivate(id) {
 
         <div v-else>
           <div class="flex items-start justify-between gap-3">
-            <div><p class="font-black">{{ item.name }}</p><p class="text-sm text-dcelup-textSoft">{{ item.current_stock }} {{ item.unit }} · Min {{ item.min_stock }}</p></div>
+            <div><p class="font-black">{{ item.name }}</p><p class="text-sm text-dcelup-textSoft">{{ formatNumber(item.current_stock) }} {{ item.unit }} · Min {{ formatNumber(item.min_stock) }}</p></div>
             <span class="rounded-full border px-2 py-1 text-xs font-bold whitespace-nowrap" :class="getStockStatus(item.current_stock, item.min_stock).class">{{ getStockStatus(item.current_stock, item.min_stock).label }}</span>
           </div>
           <div v-if="authStore.isAdmin" class="mt-3 flex gap-2">

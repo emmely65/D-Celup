@@ -10,6 +10,7 @@ import { rawMaterialApi } from '@/api/rawMaterialApi'
 import { unwrapList } from '@/utils/normalizer'
 import { formatDateTime } from '@/utils/date'
 import { formatRupiah } from '@/utils/currency'
+import { formatNumber } from '@/utils/number'
 import { useUiStore } from '@/stores/uiStore'
 import { useApiError } from '@/composables/useApiError'
 
@@ -74,7 +75,7 @@ onMounted(async () => {
     <section class="mt-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
       <h2 class="font-extrabold mb-3">Update Stok Harian</h2>
       <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-5 items-end">
-        <label class="block xl:col-span-2"><span class="mb-1 block text-sm font-bold">Bahan</span><select v-model="form.material_id" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3"><option value="">Pilih bahan</option><option v-for="m in materials" :key="m.id" :value="m.id">{{ m.name }} (Stok Saat Ini: {{ m.current_stock }} {{ m.unit }})</option></select></label>
+        <label class="block xl:col-span-2"><span class="mb-1 block text-sm font-bold">Bahan</span><select v-model="form.material_id" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3"><option value="">Pilih bahan</option><option v-for="m in materials" :key="m.id" :value="m.id">{{ m.name }} (Stok Saat Ini: {{ formatNumber(m.current_stock) }} {{ m.unit }})</option></select></label>
         <BaseInput v-model="form.actual_stock" type="number" label="Sisa Stok Asli" min="0" :max="selectedMaterialMax" step="0.001" />
         <BaseInput v-model="form.movement_date" type="date" label="Tanggal" />
         <BaseButton class="w-full" :loading="isSubmitting" @click="submitUpdate">Simpan</BaseButton>
@@ -89,8 +90,8 @@ onMounted(async () => {
         <div v-for="m in movements" :key="m.id" class="grid gap-2 border-b border-dcelup-border py-3 last:border-0 xl:grid-cols-6 xl:items-center">
           <span class="font-black">{{ m.raw_material?.name ?? m.material?.name ?? '-' }}</span>
           <span class="text-sm font-semibold text-dcelup-textSoft">Oleh: {{ m.user?.name ?? 'Admin/Kasir' }}</span>
-          <span>Qty {{ m.qty }}</span>
-          <span>{{ m.balance_before }} → {{ m.balance_after }}</span>
+          <span>Qty {{ formatNumber(m.qty) }}</span>
+          <span>{{ formatNumber(m.balance_before) }} → {{ formatNumber(m.balance_after) }}</span>
           <span class="truncate text-sm text-dcelup-textSoft" :title="m.note">{{ m.note || '-' }}</span>
           <span class="text-sm text-dcelup-textSoft">{{ formatDateTime(m.created_at ?? m.movement_date) }}</span>
         </div>
