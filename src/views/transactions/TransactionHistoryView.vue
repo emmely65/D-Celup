@@ -79,10 +79,16 @@ async function submitCancel(payload) {
     </template>
     
     <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <div class="grid w-full gap-2 sm:grid-cols-[1fr_1fr_auto] lg:w-auto">
-        <input v-model="filters.date_from" type="date" class="min-h-11 rounded-xl border border-dcelup-border px-3" />
-        <input v-model="filters.date_to" type="date" class="min-h-11 rounded-xl border border-dcelup-border px-3" />
-        <BaseButton class="w-full" @click="fetchTransactions(1)">Filter</BaseButton>
+      <div class="grid w-full items-end gap-2 sm:grid-cols-[1fr_1fr_auto] lg:w-auto">
+        <div>
+          <label class="mb-1 block text-sm font-bold text-dcelup-text">Dari</label>
+          <input v-model="filters.date_from" type="date" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3" />
+        </div>
+        <div>
+          <label class="mb-1 block text-sm font-bold text-dcelup-text">Sampai</label>
+          <input v-model="filters.date_to" type="date" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3" />
+        </div>
+        <BaseButton class="h-11 w-full" @click="fetchTransactions(1)">Tampilkan</BaseButton>
       </div>
     </div>
 
@@ -102,7 +108,7 @@ async function submitCancel(payload) {
         <span class="w-fit rounded-full border px-2 py-1 text-xs font-bold" :class="TRANSACTION_STATUS_CONFIG[trx.status]?.class">
           {{ TRANSACTION_STATUS_CONFIG[trx.status]?.label ?? trx.status }}
         </span>
-        <BaseButton v-if="canCancel(trx)" variant="danger" @click="cancelTarget = trx">Batalkan</BaseButton>
+        <BaseButton v-if="canCancel(trx)" variant="danger" @click="cancelTarget = trx">Hapus</BaseButton>
       </div>
     </div>
 
