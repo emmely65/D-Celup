@@ -7,6 +7,7 @@ import { rawMaterialApi } from '@/api/rawMaterialApi'
 import { stockMovementApi } from '@/api/stockMovementApi'
 import { useUiStore } from '@/stores/uiStore'
 import { useApiError } from '@/composables/useApiError'
+import { formatNumber } from '@/utils/number'
 import { unwrapList } from '@/utils/normalizer'
 
 const uiStore = useUiStore()
@@ -40,7 +41,7 @@ async function submit() {
     </template>
     <section class="mt-4 max-w-2xl rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
       <div class="grid gap-3 md:grid-cols-2">
-        <label class="block md:col-span-2"><span class="mb-1 block text-sm font-bold">Bahan</span><select v-model="form.material_id" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3"><option value="">Pilih bahan</option><option v-for="m in materials" :key="m.id" :value="m.id">{{ m.name }} ({{ m.current_stock }} {{ m.unit }})</option></select></label>
+        <label class="block md:col-span-2"><span class="mb-1 block text-sm font-bold">Bahan</span><select v-model="form.material_id" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3"><option value="">Pilih bahan</option><option v-for="m in materials" :key="m.id" :value="m.id">{{ m.name }} ({{ formatNumber(m.current_stock) }} {{ m.unit }})</option></select></label>
         <BaseInput v-model="form.actual_stock" type="number" label="Saldo Baru" min="0" step="0.001" />
         <!-- BUG-20: <div></div> kosong sebagai spacer dihapus, note sekarang pakai col-span-2 -->
         <BaseInput v-model="form.movement_date" type="date" label="Tanggal" />
