@@ -1,5 +1,6 @@
 <script setup>
 import { getStockStatus } from '@/constants/status'
+import { formatNumber } from '@/utils/number'
 defineProps({ materials: { type: Array, default: () => [] } })
 </script>
 
@@ -13,7 +14,7 @@ defineProps({ materials: { type: Array, default: () => [] } })
       <div v-for="item in materials" :key="item.id" class="flex items-center justify-between rounded-xl bg-white px-3 py-2">
         <div>
           <p class="font-bold">{{ item.name }}</p>
-          <p class="text-xs text-dcelup-textSoft">{{ item.current_stock }} {{ item.unit }} · Min {{ item.min_stock }}</p>
+          <p class="text-xs text-dcelup-textSoft">{{ formatNumber(item.current_stock) }} {{ item.unit }} · Min {{ formatNumber(item.min_stock) }}</p>
         </div>
         <span class="rounded-full border px-2 py-1 text-xs font-bold" :class="getStockStatus(item.current_stock, item.min_stock).class">
           {{ getStockStatus(item.current_stock, item.min_stock).label }}
