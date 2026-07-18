@@ -58,7 +58,7 @@ function cancelEdit() {
 
 async function updateMaterial(id) {
   try {
-    await rawMaterialApi.update(id, { ...editForm, current_stock: Number(editForm.current_stock), min_stock: Number(editForm.min_stock) })
+    await rawMaterialApi.update(id, { name: editForm.name, unit: editForm.unit, min_stock: Number(editForm.min_stock) })
     uiStore.showToast('success', 'Bahan berhasil diupdate')
     editId.value = null
     await fetchMaterials()
@@ -99,7 +99,10 @@ async function deactivate(id) {
         <div v-if="editId === item.id" class="space-y-3">
           <BaseInput v-model="editForm.name" label="Nama" />
           <div class="grid grid-cols-2 gap-3">
-            <BaseInput v-model="editForm.current_stock" type="number" label="Stok Saat Ini" />
+            <div class="group relative">
+              <BaseInput v-model="editForm.current_stock" type="number" label="Stok Saat Ini" disabled />
+              <div class="pointer-events-none absolute -top-10 left-0 w-max opacity-0 transition-opacity group-hover:opacity-100 bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">Gunakan menu Update Stok untuk merubah</div>
+            </div>
             <BaseInput v-model="editForm.min_stock" type="number" label="Minimal Stok" />
           </div>
           <BaseInput v-model="editForm.unit" label="Satuan" />
