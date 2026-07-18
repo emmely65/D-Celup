@@ -84,9 +84,9 @@ async function deactivate(id) {
       <h2 class="font-black">Tambah Bahan</h2>
       <div class="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
         <BaseInput v-model="form.name" label="Nama" />
-        <BaseInput v-model="form.unit" label="Unit" />
+        <BaseInput v-model="form.unit" label="Satuan" />
         <BaseInput v-model="form.current_stock" type="number" label="Stok awal" />
-        <BaseInput v-model="form.min_stock" type="number" label="Min stok" />
+        <BaseInput v-model="form.min_stock" type="number" label="Minimal Stok" />
         <BaseButton class="self-end" @click="createMaterial">Simpan</BaseButton>
       </div>
     </section>
@@ -99,9 +99,9 @@ async function deactivate(id) {
           <BaseInput v-model="editForm.name" label="Nama" />
           <div class="grid grid-cols-2 gap-3">
             <BaseInput v-model="editForm.current_stock" type="number" label="Stok Saat Ini" />
-            <BaseInput v-model="editForm.min_stock" type="number" label="Min Stok" />
+            <BaseInput v-model="editForm.min_stock" type="number" label="Minimal Stok" />
           </div>
-          <BaseInput v-model="editForm.unit" label="Satuan (Unit)" />
+          <BaseInput v-model="editForm.unit" label="Satuan" />
           <div class="flex gap-2 pt-2">
             <BaseButton @click="updateMaterial(item.id)" class="flex-1">Simpan</BaseButton>
             <BaseButton variant="secondary" @click="cancelEdit" class="flex-1">Batal</BaseButton>
