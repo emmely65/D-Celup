@@ -23,9 +23,8 @@ const editForm = reactive({ name: '', unit: '', current_stock: 0, min_stock: 0 }
 onMounted(fetchMaterials)
 
 function getStockStatus(current, min) {
-  const diff = Number(current) - Number(min)
-  if (diff < 0) return { label: 'Stok Habis', class: 'bg-dcelup-redSoft text-dcelup-redDark border-dcelup-red' }
-  if (diff <= 5) return { label: 'Hampir Habis', class: 'bg-dcelup-yellowSoft text-amber-700 border-dcelup-yellow' }
+  if (Number(current) <= 0) return { label: 'Stok Habis', class: 'bg-dcelup-redSoft text-dcelup-redDark border-dcelup-red' }
+  if (Number(current) <= Number(min)) return { label: 'Stok Menipis', class: 'bg-dcelup-yellowSoft text-amber-700 border-dcelup-yellow' }
   return { label: 'Aman', class: 'bg-dcelup-greenSoft text-green-700 border-green-200' }
 }
 
