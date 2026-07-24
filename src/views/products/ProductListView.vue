@@ -9,7 +9,6 @@ import { useUiStore } from '@/stores/uiStore'
 import { useMasterDataStore } from '@/stores/masterDataStore'
 import { useApiError } from '@/composables/useApiError'
 import { unwrapList } from '@/utils/normalizer'
-import { getProductTypeLabel } from '@/constants/productTypes'
 
 const uiStore = useUiStore()
 const masterStore = useMasterDataStore()
@@ -61,7 +60,7 @@ function editProduct(product) {
   activeTab.value = 'product'
   editingProductId.value = product.id
   formProduct.name = product.name
-  formProduct.category = product.category
+  formProduct.category = product.category || 'original'
   formProduct.description = product.description || ''
   formProduct.is_active = product.is_active !== undefined ? product.is_active : true
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -155,25 +154,10 @@ function deleteSauce(name) {
     <!-- Form Section 1: Nama Produk -->
     <section v-if="activeTab === 'product'" class="mt-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
       <h2 class="font-black text-dcelup-text mb-3">{{ editingProductId ? 'Edit Nama Produk' : 'Tambah Nama Produk' }}</h2>
-      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 items-end">
         <BaseInput v-model="formProduct.name" label="Nama Produk" placeholder="misal: Sempol Ayam Original" />
-        
-        <label class="block">
-          <span class="mb-1 block text-sm font-bold text-dcelup-text">Kategori</span>
-          <select v-model="formProduct.category" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3 bg-white text-dcelup-text font-semibold">
-            <option v-for="cat in masterStore.categories" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
-          </select>
-        </label>
 
-        <label class="block">
-          <span class="mb-1 block text-sm font-bold text-dcelup-text">Pilihan Saus</span>
-          <select v-model="formProduct.description" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3 bg-white text-dcelup-text font-semibold">
-            <option value="">Pilih Saus Master (Opsional)</option>
-            <option v-for="s in masterStore.sauces" :key="s" :value="s">{{ s }}</option>
-          </select>
-        </label>
-
-        <div class="flex items-end gap-2 lg:col-span-3">
+        <div class="flex items-end gap-2">
           <BaseButton class="min-w-32" @click="saveProduct">{{ editingProductId ? 'Update Nama Produk' : 'Simpan Nama Produk' }}</BaseButton>
           <BaseButton v-if="editingProductId" variant="secondary" @click="cancelEditProduct">Batal</BaseButton>
         </div>
@@ -219,8 +203,6 @@ function deleteSauce(name) {
               <tr class="bg-dcelup-cream border-b border-dcelup-border text-dcelup-redDark font-black">
                 <th class="py-2.5 px-3">No</th>
                 <th class="py-2.5 px-3">Nama Produk</th>
-                <th class="py-2.5 px-3">Kategori</th>
-                <th class="py-2.5 px-3">Saus Master</th>
                 <th class="py-2.5 px-3 text-right">Aksi</th>
               </tr>
             </thead>
@@ -228,8 +210,6 @@ function deleteSauce(name) {
               <tr v-for="(p, index) in products" :key="p.id" class="border-b border-dcelup-border/60 hover:bg-white transition-colors">
                 <td class="py-2.5 px-3 font-semibold text-dcelup-textSoft">{{ index + 1 }}</td>
                 <td class="py-2.5 px-3 font-black text-dcelup-text">{{ p.name }}</td>
-                <td class="py-2.5 px-3 font-bold text-dcelup-red">{{ getProductTypeLabel(p.category) }}</td>
-                <td class="py-2.5 px-3 font-semibold text-dcelup-textSoft">{{ p.description || '-' }}</td>
                 <td class="py-2.5 px-3 text-right space-x-2">
                   <BaseButton variant="secondary" class="!px-3 !py-1 text-xs" @click="editProduct(p)">Edit</BaseButton>
                   <BaseButton variant="danger" class="!px-3 !py-1 text-xs" @click="deleteProduct(p.id)">Hapus</BaseButton>
