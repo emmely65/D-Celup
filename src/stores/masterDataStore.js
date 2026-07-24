@@ -24,6 +24,7 @@ export const INITIAL_SAUCES = [
   'Saus Teriyaki + Saus Kacang',
   'Saus Lada Hitam + Saus Sadis',
   'Saus BBQ Spicy + Saus Kacang',
+  'Saus Kacang + BBQ Spicy',
   'Saus Sadis + Lada Hitam'
 ]
 
