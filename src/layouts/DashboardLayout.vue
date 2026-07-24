@@ -50,10 +50,10 @@ async function logout() {
 <template>
   <div class="min-h-screen bg-dcelup-cream text-dcelup-text">
     <aside
-      class="fixed inset-y-0 left-0 z-40 w-72 max-w-[86vw] transform bg-dcelup-red text-white shadow-xl transition-transform md:w-56 md:translate-x-0 lg:w-64 xl:w-72"
+      class="fixed inset-y-0 left-0 z-40 flex flex-col w-72 max-w-[86vw] transform bg-dcelup-red text-white shadow-xl transition-transform md:w-56 md:translate-x-0 lg:w-64 xl:w-72"
       :class="uiStore.sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
-      <div class="flex items-center gap-3 border-b border-white/20 px-4 py-4">
+      <div class="flex shrink-0 items-center gap-3 border-b border-white/20 px-4 py-4">
         <img :src="logo" alt="Logo D'Celup" class="h-11 w-11 shrink-0 rounded-full bg-white object-cover shadow-sm" />
         <div class="flex-1 min-w-0">
           <p class="truncate font-extrabold leading-tight text-white">D'Celup</p>
@@ -64,23 +64,23 @@ async function logout() {
         </div>
       </div>
 
-      <nav class="h-[calc(100vh-8rem)] overflow-y-auto px-3 py-4 no-scrollbar">
+      <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
         <RouterLink
           v-for="item in menuItems"
           :key="item.path"
           :to="item.path"
-          class="mb-1 flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-white/15"
+          class="flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-white/15"
           :class="route.path === item.path ? 'bg-white text-dcelup-red shadow' : 'text-white'"
           @click="uiStore.closeSidebar()"
         >
-          <component :is="item.icon" class="h-5 w-5" />
-          {{ item.name }}
+          <component :is="item.icon" class="h-5 w-5 shrink-0" />
+          <span class="truncate">{{ item.name }}</span>
         </RouterLink>
       </nav>
 
-      <div class="absolute bottom-0 left-0 right-0 border-t border-white/20 p-3">
-        <button class="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-white/10 px-3 py-2 font-semibold hover:bg-white/20" @click="logout">
-          <LogOut class="h-5 w-5" /> Logout
+      <div class="shrink-0 border-t border-white/20 bg-dcelup-red p-3">
+        <button class="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-white/10 px-3 py-2 font-semibold text-white transition hover:bg-white/20" @click="logout">
+          <LogOut class="h-5 w-5 shrink-0" /> Logout
         </button>
       </div>
     </aside>
