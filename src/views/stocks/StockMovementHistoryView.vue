@@ -98,8 +98,8 @@ onMounted(async () => {
           </div>
           <div v-for="m in movements" :key="m.id" class="grid gap-2 border-b border-dcelup-border py-3 last:border-0 xl:grid-cols-6 xl:items-center">
             <span class="font-black">{{ m.raw_material?.name ?? m.material?.name ?? '-' }}</span>
-            <span class="text-sm font-semibold text-dcelup-textSoft">Oleh: {{ m.creator?.name ?? m.user?.name ?? 'Sistem' }}</span>
-            <span>Qty {{ formatNumber(m.qty) }}</span>
+            <span class="text-sm font-semibold text-dcelup-textSoft">{{ m.creator?.name ?? m.user?.name ?? 'Sistem' }}</span>
+            <span>{{ formatNumber(m.qty) }}</span>
             <span>{{ formatNumber(m.balance_before) }} → {{ formatNumber(m.balance_after) }}</span>
             <span class="truncate text-sm text-dcelup-textSoft" :title="m.note">{{ m.note || '-' }}</span>
             <span class="text-sm text-dcelup-textSoft">{{ formatDateTime(m.created_at ?? m.movement_date) }}</span>
