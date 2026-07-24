@@ -25,7 +25,6 @@ export const useDashboardStore = defineStore('dashboard', {
         const res = await dashboardApi.getAdminSummary()
         this.adminSummary = res.data.data
       } catch (e) {
-        // BUG-16: Log error agar tidak hilang silently
         console.error('[DashboardStore] fetchAdminSummary gagal:', e)
       }
     },

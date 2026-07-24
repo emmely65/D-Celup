@@ -6,14 +6,14 @@ export const useAuthStore = defineStore('auth', {
     token: null,
     user: null,
     isAuthenticated: false,
-    isLoading: false
+    isLoading: false,
   }),
 
   getters: {
     isAdmin: (state) => state.user?.role === 'admin',
     isKasir: (state) => state.user?.role === 'kasir',
     userRole: (state) => state.user?.role ?? null,
-    userName: (state) => state.user?.name ?? ''
+    userName: (state) => state.user?.name ?? '',
   },
 
   actions: {
@@ -69,7 +69,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         await authApi.logout()
       } catch (_) {
-        // tetap hapus lokal meski API logout gagal
+        // Tetap hapus state lokal meski API logout gagal
       } finally {
         this.clearAuth()
       }
@@ -89,13 +89,12 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // BUG-10: Dengarkan event 'auth:unauthorized' yang dikirim http.js
-    // saat response 401 diterima, agar Pinia state ikut bersih
-    // (menghindari circular dependency http → authStore → authApi → http)
+    // Mendengarkan event 'auth:unauthorized' dari http.js
+    // Memisahkan concern agar tidak ada circular dependency
     setupUnauthorizedListener() {
       window.addEventListener('auth:unauthorized', () => {
         this.clearAuth()
       })
-    }
-  }
+    },
+  },
 })

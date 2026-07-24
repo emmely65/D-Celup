@@ -6,31 +6,28 @@ export function setupGuards(router) {
     const requiresAuth = to.meta.requiresAuth !== false
     const allowedRoles = to.meta.roles ?? []
 
-    // BUG-09: Hydrate dulu dari localStorage sebelum pengecekan apapun.
-    // Tanpa ini, saat user buka /login dengan token valid di localStorage,
-    // isAuthenticated masih false dan redirect ke dashboard tidak terjadi.
+    // Hydrate state dari localStorage saat pertama kali akses
     if (!authStore.isAuthenticated) {
       authStore.hydrateFromStorage()
     }
 
-    // Jika route tidak butuh auth dan user sudah login → redirect ke dashboard
+    // Route tidak butuh auth tapi user sudah login → arahkan ke dashboard
     if (!requiresAuth && authStore.isAuthenticated) {
       return next({ name: 'dashboard' })
     }
 
-    // Jika route tidak butuh auth dan user belum login → boleh lanjut
+    // Route tidak butuh auth → izinkan lanjut
     if (!requiresAuth) {
       return next()
     }
 
-    // Route butuh auth, tapi setelah hydrate masih belum authenticated
-    // → coba validasi token ke server
+    // Route butuh auth, belum authenticated → validasi token ke server
     if (!authStore.isAuthenticated) {
       const valid = await authStore.fetchMe()
       if (!valid) return next({ name: 'login' })
     }
 
-    // Cek role
+    // Cek izin role
     if (allowedRoles.length > 0 && !allowedRoles.includes(authStore.userRole)) {
       return next({ name: 'forbidden' })
     }
@@ -38,4 +35,3 @@ export function setupGuards(router) {
     return next()
   })
 }
-
