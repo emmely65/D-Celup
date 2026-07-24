@@ -242,7 +242,7 @@ async function deactivate(id) {
                   {{ formatRupiah(variant.price) }}
                 </span>
                 <div class="flex gap-2">
-                  <BaseButton variant="accent" class="!px-3 !py-1 text-xs" @click="startEdit(variant)">Edit</BaseButton>
+                  <BaseButton variant="secondary" class="!px-3 !py-1 text-xs" @click="startEdit(variant)">Edit</BaseButton>
                   <BaseButton variant="danger" class="!px-3 !py-1 text-xs" @click="deactivate(variant.id)">Hapus</BaseButton>
                 </div>
               </div>
