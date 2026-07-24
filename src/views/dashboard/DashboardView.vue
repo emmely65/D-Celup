@@ -60,7 +60,7 @@ const cashierSummary = computed(() => dashboardStore.cashierSummary ?? {})
         <h2 class="font-black text-lg text-dcelup-redDark flex items-center gap-2">
           <span>🔥</span> Top Produk Terlaris
         </h2>
-        <span class="text-xs font-bold text-dcelup-textSoft">Berdasarkan Total Terjual</span>
+        <span class="text-xs font-bold text-dcelup-textSoft">Gabungan Seluruh Transaksi Admin & Kasir</span>
       </div>
 
       <div v-if="dashboardStore.topProducts.length" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">

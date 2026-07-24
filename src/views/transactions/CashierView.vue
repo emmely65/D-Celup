@@ -72,6 +72,7 @@ async function submitTransaction() {
     cartStore.clearCart()
     showPayment.value = false
     uiStore.showToast('success', 'Transaksi berhasil disimpan')
+    dashboardStore.fetchTopProducts()
   } catch (error) {
     uiStore.showToast('error', extractMessage(error))
   } finally {
