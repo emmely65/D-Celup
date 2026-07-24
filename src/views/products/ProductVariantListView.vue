@@ -28,7 +28,10 @@ const DEFAULT_SAUCES = [
   'Saus Sadis + Lada Hitam'
 ]
 
+import { useMasterDataStore } from '@/stores/masterDataStore'
+
 const uiStore = useUiStore()
+const masterStore = useMasterDataStore()
 const { extractMessage } = useApiError()
 const products = ref([])
 const variants = ref([])
@@ -44,23 +47,23 @@ async function fetchVariants() { variants.value = unwrapList(await productVarian
 const availableSauces = computed(() => {
   const set = new Set()
   
-  // 1. Sauces from selected product description
+  // 1. Master Store Sauces
+  masterStore.sauces.forEach(s => set.add(s))
+
+  // 2. Sauces from selected product description
   const selectedProd = products.value.find(x => String(x.id) === String(form.product_id))
   if (selectedProd && selectedProd.description) {
     const list = selectedProd.description.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean)
     list.forEach(s => set.add(s))
   }
   
-  // 2. Sauces from all master products
+  // 3. Sauces from all master products
   products.value.forEach(item => {
     if (item.description) {
       const list = item.description.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean)
       list.forEach(s => set.add(s))
     }
   })
-
-  // 3. Default sauces
-  DEFAULT_SAUCES.forEach(s => set.add(s))
 
   if (editForm.sauce_name) set.add(editForm.sauce_name)
 
@@ -136,7 +139,7 @@ async function deactivate(id) {
         <label class="block">
           <span class="mb-1 block text-sm font-bold">Kategori</span>
           <select v-model="form.type" class="min-h-11 w-full rounded-xl border border-dcelup-border px-3 bg-white">
-            <option v-for="t in PRODUCT_TYPES" :key="t.value" :value="t.value">{{ t.label }}</option>
+            <option v-for="t in masterStore.categories" :key="t.value" :value="t.value">{{ t.label }}</option>
           </select>
         </label>
 
