@@ -50,8 +50,8 @@ function getItemName(item) {
     </div>
 
     <div v-else class="grid gap-4 md:grid-cols-2">
-      <KpiCard title="Transaksi Hari Ini" :value="cashierSummary.total_transactions ?? 0" caption="Data kasir" />
-      <KpiCard title="Pemasukan Hari Ini" :value="formatRupiah(cashierSummary.total_sales ?? cashierSummary.total_income ?? 0)" caption="Dari transaksi" />
+      <KpiCard title="Transaksi Hari Ini" :value="cashierSummary.my_transaction_count ?? cashierSummary.total_transactions ?? cashierSummary.transaction_count ?? 0" caption="Data kasir" />
+      <KpiCard title="Pemasukan Hari Ini" :value="formatRupiah(cashierSummary.my_total_sales ?? cashierSummary.total_sales ?? cashierSummary.total_income ?? 0)" caption="Dari transaksi" />
     </div>
 
     <div class="mt-5 grid gap-4 xl:grid-cols-[2fr_1fr]">
