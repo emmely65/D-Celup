@@ -21,7 +21,7 @@ const menuItems = computed(() => [
   { name: 'Laporan', path: '/reports', icon: BarChart3, roles: ['admin'] },
   { name: 'Stok Bahan', path: '/raw-materials', icon: Package, roles: ['admin', 'kasir'] },
   { name: 'Update Stok', path: '/stock/movements', icon: ScrollText, roles: ['admin', 'kasir'] },
-  { name: 'Produk', path: '/products', icon: Utensils, roles: ['admin'] },
+  { name: 'Master Data Produk', path: '/products', icon: Utensils, roles: ['admin'] },
   { name: 'Varian Produk', path: '/product-variants', icon: Layers, roles: ['admin'] },
   { name: 'User', path: '/users', icon: Users, roles: ['admin'] },
   { name: 'Activity Log', path: '/activity-logs', icon: ScrollText, roles: ['admin'] }
