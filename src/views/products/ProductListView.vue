@@ -30,7 +30,7 @@ onMounted(fetchProducts)
 async function fetchProducts() {
   isLoading.value = true
   try {
-    products.value = unwrapList(await productApi.getAll({ per_page: 100 }))
+    products.value = unwrapList(await productApi.getAll({ per_page: 100, is_active: 1 }))
   } catch (e) {
     uiStore.showToast('error', extractMessage(e))
   } finally {

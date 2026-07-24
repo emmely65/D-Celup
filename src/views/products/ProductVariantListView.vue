@@ -29,11 +29,11 @@ onMounted(async () => {
 })
 
 async function fetchProducts() {
-  products.value = unwrapList(await productApi.getAll({ per_page: 100 }))
+  products.value = unwrapList(await productApi.getAll({ per_page: 100, is_active: 1 }))
 }
 
 async function fetchVariants() {
-  variants.value = unwrapList(await productVariantApi.getAll({ per_page: 100 }))
+  variants.value = unwrapList(await productVariantApi.getAll({ per_page: 100, is_active: 1 }))
 }
 
 // Compute available sauces from master store + master products
