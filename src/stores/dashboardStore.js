@@ -88,6 +88,7 @@ export const useDashboardStore = defineStore('dashboard', {
       await Promise.allSettled([
         this.fetchCashierSummary(),
         this.fetchWeeklySales(),
+        this.fetchTopProducts(),
         this.fetchLowStockMaterials()
       ])
       this.isLoading = false

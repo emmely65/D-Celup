@@ -55,7 +55,7 @@ const cashierSummary = computed(() => dashboardStore.cashierSummary ?? {})
     </div>
 
     <!-- TOP PRODUCTS SECTION -->
-    <section v-if="authStore.isAdmin" class="mt-5 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4 shadow-sm">
+    <section class="mt-5 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4 shadow-sm">
       <div class="flex items-center justify-between mb-3 border-b border-dcelup-border pb-2">
         <h2 class="font-black text-lg text-dcelup-redDark flex items-center gap-2">
           <span>🔥</span> Top Produk Terlaris
