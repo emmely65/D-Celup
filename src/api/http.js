@@ -1,13 +1,30 @@
 import axios from 'axios'
+import { createMockAdapter } from './mockBackend'
 
-const http = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+const isLocalBackend =
+  import.meta.env.VITE_API_BASE_URL?.includes('dcelup-backend.test') ||
+  import.meta.env.VITE_API_BASE_URL?.includes('localhost') ||
+  import.meta.env.VITE_API_BASE_URL?.includes('127.0.0.1')
+
+const useMockApi =
+  import.meta.env.VITE_USE_MOCK_API === 'true' ||
+  import.meta.env.VITE_USE_MOCK_API === true ||
+  (import.meta.env.VITE_USE_MOCK_API !== 'false' && import.meta.env.PROD && isLocalBackend)
+
+const httpConfig = {
+  baseURL: useMockApi ? '/mock-api' : import.meta.env.VITE_API_BASE_URL,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
     'bypass-tunnel-reminder': 'true',
   },
-})
+}
+
+if (useMockApi) {
+  httpConfig.adapter = createMockAdapter()
+}
+
+const http = axios.create(httpConfig)
 
 // Interceptor: tambahkan Bearer token ke setiap request
 http.interceptors.request.use((config) => {
