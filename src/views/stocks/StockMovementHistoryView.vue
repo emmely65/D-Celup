@@ -62,7 +62,8 @@ async function submitUpdate() {
 
 onMounted(async () => {
   await fetchMovements()
-  materials.value = unwrapList(await rawMaterialApi.getAll({ per_page: 100 }))
+  const res = await rawMaterialApi.getAll({ per_page: 100, is_active: 1 })
+  materials.value = unwrapList(res).filter(m => m.is_active !== false && Number(m.is_active) !== 0)
 })
 </script>
 
@@ -82,28 +83,51 @@ onMounted(async () => {
       </div>
     </section>
 
-    <section class="mt-4 rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4">
-      <h2 class="font-extrabold mb-3">Riwayat Update</h2>
+    <section class="mt-5 rounded-2xl border border-dcelup-border/80 bg-white p-5 shadow-xs">
+      <h2 class="font-black text-base text-dcelup-text mb-4">Riwayat Update Stok</h2>
       <LoadingBlock v-if="isLoading" />
       <template v-else>
-        <EmptyState v-if="!movements.length" title="Belum ada mutasi stok" />
-        <div v-else>
-          <div class="hidden grid-cols-6 gap-2 border-b border-dcelup-border pb-2 text-sm font-black text-dcelup-redDark xl:grid">
-            <span>Bahan</span>
-            <span>Petugas</span>
-            <span>Jumlah Mutasi</span>
-            <span>Perubahan Stok</span>
-            <span>Catatan</span>
-            <span>Waktu</span>
-          </div>
-          <div v-for="m in movements" :key="m.id" class="grid gap-2 border-b border-dcelup-border py-3 last:border-0 xl:grid-cols-6 xl:items-center">
-            <span class="font-black">{{ m.raw_material?.name ?? m.material?.name ?? '-' }}</span>
-            <span class="text-sm font-semibold text-dcelup-textSoft">{{ m.creator?.name ?? m.user?.name ?? 'Sistem' }}</span>
-            <span>{{ formatNumber(m.qty) }}</span>
-            <span>{{ formatNumber(m.balance_before) }} → {{ formatNumber(m.balance_after) }}</span>
-            <span class="truncate text-sm text-dcelup-textSoft" :title="m.note">{{ m.note || '-' }}</span>
-            <span class="text-sm text-dcelup-textSoft">{{ formatDateTime(m.created_at ?? m.movement_date) }}</span>
-          </div>
+        <EmptyState v-if="!movements.length" title="Belum ada mutasi stok" description="Riwayat penambahan dan pengurangan stok akan muncul di sini." />
+        <div v-else class="overflow-x-auto rounded-xl border border-dcelup-border/60">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-dcelup-cream/70 border-b border-dcelup-border/80 text-dcelup-redDark text-xs font-black uppercase tracking-wider">
+                <th class="py-3.5 px-4 text-left">Nama Bahan</th>
+                <th class="py-3.5 px-4 text-left">Petugas</th>
+                <th class="py-3.5 px-4 text-right">Jumlah Mutasi</th>
+                <th class="py-3.5 px-4 text-center">Perubahan Stok</th>
+                <th class="py-3.5 px-4 text-left">Catatan</th>
+                <th class="py-3.5 px-4 text-right">Waktu</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-dcelup-border/40">
+              <tr v-for="m in movements" :key="m.id" class="hover:bg-dcelup-creamSoft/60 transition-colors">
+                <td class="py-3.5 px-4 align-middle whitespace-nowrap font-extrabold text-dcelup-text">
+                  <span>{{ m.raw_material?.name ?? m.material?.name ?? '-' }}</span>
+                  <span v-if="(m.raw_material && Number(m.raw_material.is_active) === 0) || (m.material && Number(m.material.is_active) === 0)" class="ml-2 rounded-md bg-gray-200/80 px-2 py-0.5 text-[10px] font-bold text-gray-600 border border-gray-300/50">
+                    Dihapus
+                  </span>
+                </td>
+                <td class="py-3.5 px-4 align-middle whitespace-nowrap text-xs font-bold text-dcelup-text">
+                  {{ m.creator?.name ?? m.user?.name ?? 'Sistem' }}
+                </td>
+                <td class="py-3.5 px-4 align-middle whitespace-nowrap text-right font-black text-dcelup-redDark">
+                  {{ formatNumber(m.qty) }}
+                </td>
+                <td class="py-3.5 px-4 align-middle text-center whitespace-nowrap">
+                  <span class="inline-flex items-center rounded-lg bg-dcelup-cream px-2.5 py-1 text-xs font-extrabold text-dcelup-textSoft">
+                    {{ formatNumber(m.balance_before) }} → {{ formatNumber(m.balance_after) }}
+                  </span>
+                </td>
+                <td class="py-3.5 px-4 align-middle text-xs font-semibold text-dcelup-textSoft max-w-xs truncate" :title="m.note">
+                  {{ m.note || '-' }}
+                </td>
+                <td class="py-3.5 px-4 align-middle text-right whitespace-nowrap text-xs font-semibold text-dcelup-textSoft">
+                  {{ formatDateTime(m.created_at ?? m.movement_date) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </template>
     </section>

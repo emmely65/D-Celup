@@ -1,3 +1,4 @@
+
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
@@ -187,32 +188,35 @@ function deleteSauce(name) {
     <div class="mt-6 space-y-6">
 
       <!-- TABEL 1: NAMA PRODUK -->
-      <section class="rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4 shadow-sm">
-        <div class="flex items-center justify-between mb-3 border-b border-dcelup-border pb-2">
-          <h2 class="font-black text-lg text-dcelup-redDark flex items-center gap-2">
-            <span>📦</span> 1. Tabel Master Nama Produk
+      <section class="rounded-2xl border border-dcelup-border/80 bg-white p-5 shadow-xs">
+        <div class="flex items-center justify-between mb-4 border-b border-dcelup-border/50 pb-3">
+          <h2 class="font-black text-base text-dcelup-text flex items-center gap-2">
+            <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-dcelup-red/10 text-dcelup-red text-sm">📦</span>
+            1. Tabel Master Nama Produk
           </h2>
-          <span class="rounded-full bg-dcelup-red/10 px-3 py-1 text-xs font-bold text-dcelup-red">{{ products.length }} item</span>
+          <span class="rounded-full bg-dcelup-red/10 px-3 py-1 text-xs font-extrabold text-dcelup-red">{{ products.length }} item</span>
         </div>
 
         <EmptyState v-if="!products.length" title="Belum ada Nama Produk" />
         
-        <div v-else class="overflow-x-auto">
+        <div v-else class="overflow-x-auto rounded-xl border border-dcelup-border/60">
           <table class="w-full text-left border-collapse text-sm">
             <thead>
-              <tr class="bg-dcelup-cream border-b border-dcelup-border text-dcelup-redDark font-black">
-                <th class="py-2.5 px-3">No</th>
-                <th class="py-2.5 px-3">Nama Produk</th>
-                <th class="py-2.5 px-3 text-right">Aksi</th>
+              <tr class="bg-dcelup-cream/70 border-b border-dcelup-border/80 text-dcelup-redDark text-xs font-black uppercase tracking-wider">
+                <th class="py-3.5 px-4 w-16 text-center">No</th>
+                <th class="py-3.5 px-4 text-left">Nama Produk</th>
+                <th class="py-3.5 px-4 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="(p, index) in products" :key="p.id" class="border-b border-dcelup-border/60 hover:bg-white transition-colors">
-                <td class="py-2.5 px-3 font-semibold text-dcelup-textSoft">{{ index + 1 }}</td>
-                <td class="py-2.5 px-3 font-black text-dcelup-text">{{ p.name }}</td>
-                <td class="py-2.5 px-3 text-right space-x-2">
-                  <BaseButton variant="secondary" class="!px-3 !py-1 text-xs" @click="editProduct(p)">Edit</BaseButton>
-                  <BaseButton variant="danger" class="!px-3 !py-1 text-xs" @click="deleteProduct(p.id)">Hapus</BaseButton>
+            <tbody class="divide-y divide-dcelup-border/40">
+              <tr v-for="(p, index) in products" :key="p.id" class="hover:bg-dcelup-creamSoft/60 transition-colors">
+                <td class="py-3.5 px-4 align-middle text-center font-bold text-dcelup-textSoft text-xs">{{ index + 1 }}</td>
+                <td class="py-3.5 px-4 align-middle font-extrabold text-dcelup-text">{{ p.name }}</td>
+                <td class="py-3.5 px-4 align-middle text-right whitespace-nowrap">
+                  <div class="inline-flex items-center justify-end gap-2">
+                    <BaseButton variant="secondary" class="!px-3 !py-1.5 text-xs" @click="editProduct(p)">Edit</BaseButton>
+                    <BaseButton variant="danger" class="!px-3 !py-1.5 text-xs" @click="deleteProduct(p.id)">Hapus</BaseButton>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -221,33 +225,34 @@ function deleteSauce(name) {
       </section>
 
       <!-- TABEL 2: KATEGORI -->
-      <section class="rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4 shadow-sm">
-        <div class="flex items-center justify-between mb-3 border-b border-dcelup-border pb-2">
-          <h2 class="font-black text-lg text-dcelup-redDark flex items-center gap-2">
-            <span>🏷️</span> 2. Tabel Master Kategori
+      <section class="rounded-2xl border border-dcelup-border/80 bg-white p-5 shadow-xs">
+        <div class="flex items-center justify-between mb-4 border-b border-dcelup-border/50 pb-3">
+          <h2 class="font-black text-base text-dcelup-text flex items-center gap-2">
+            <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 text-sm">🏷️</span>
+            2. Tabel Master Kategori
           </h2>
-          <span class="rounded-full bg-dcelup-red/10 px-3 py-1 text-xs font-bold text-dcelup-red">{{ masterStore.categories.length }} item</span>
+          <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-extrabold text-amber-700">{{ masterStore.categories.length }} item</span>
         </div>
 
         <EmptyState v-if="!masterStore.categories.length" title="Belum ada Kategori" />
         
-        <div v-else class="overflow-x-auto">
+        <div v-else class="overflow-x-auto rounded-xl border border-dcelup-border/60">
           <table class="w-full text-left border-collapse text-sm">
             <thead>
-              <tr class="bg-dcelup-cream border-b border-dcelup-border text-dcelup-redDark font-black">
-                <th class="py-2.5 px-3">No</th>
-                <th class="py-2.5 px-3">Nama Kategori</th>
-                <th class="py-2.5 px-3">Kode Kategori</th>
-                <th class="py-2.5 px-3 text-right">Aksi</th>
+              <tr class="bg-dcelup-cream/70 border-b border-dcelup-border/80 text-dcelup-redDark text-xs font-black uppercase tracking-wider">
+                <th class="py-3.5 px-4 w-16 text-center">No</th>
+                <th class="py-3.5 px-4 text-left">Nama Kategori</th>
+                <th class="py-3.5 px-4 text-left">Kode Kategori</th>
+                <th class="py-3.5 px-4 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="(cat, index) in masterStore.categories" :key="cat.value" class="border-b border-dcelup-border/60 hover:bg-white transition-colors">
-                <td class="py-2.5 px-3 font-semibold text-dcelup-textSoft">{{ index + 1 }}</td>
-                <td class="py-2.5 px-3 font-black text-dcelup-text">{{ cat.label }}</td>
-                <td class="py-2.5 px-3 font-mono text-xs text-dcelup-textSoft">{{ cat.value }}</td>
-                <td class="py-2.5 px-3 text-right">
-                  <BaseButton variant="danger" class="!px-3 !py-1 text-xs" @click="deleteCategory(cat.value)">Hapus</BaseButton>
+            <tbody class="divide-y divide-dcelup-border/40">
+              <tr v-for="(cat, index) in masterStore.categories" :key="cat.value" class="hover:bg-dcelup-creamSoft/60 transition-colors">
+                <td class="py-3.5 px-4 align-middle text-center font-bold text-dcelup-textSoft text-xs">{{ index + 1 }}</td>
+                <td class="py-3.5 px-4 align-middle font-extrabold text-dcelup-text">{{ cat.label }}</td>
+                <td class="py-3.5 px-4 align-middle font-mono text-xs font-bold text-dcelup-textSoft">{{ cat.value }}</td>
+                <td class="py-3.5 px-4 align-middle text-right whitespace-nowrap">
+                  <BaseButton variant="danger" class="!px-3 !py-1.5 text-xs" @click="deleteCategory(cat.value)">Hapus</BaseButton>
                 </td>
               </tr>
             </tbody>
@@ -256,31 +261,32 @@ function deleteSauce(name) {
       </section>
 
       <!-- TABEL 3: SAUS -->
-      <section class="rounded-xl border border-dcelup-border bg-dcelup-creamSoft p-4 shadow-sm">
-        <div class="flex items-center justify-between mb-3 border-b border-dcelup-border pb-2">
-          <h2 class="font-black text-lg text-dcelup-redDark flex items-center gap-2">
-            <span>🌶️</span> 3. Tabel Master Saus
+      <section class="rounded-2xl border border-dcelup-border/80 bg-white p-5 shadow-xs">
+        <div class="flex items-center justify-between mb-4 border-b border-dcelup-border/50 pb-3">
+          <h2 class="font-black text-base text-dcelup-text flex items-center gap-2">
+            <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 text-sm">🌶️</span>
+            3. Tabel Master Saus
           </h2>
-          <span class="rounded-full bg-dcelup-red/10 px-3 py-1 text-xs font-bold text-dcelup-red">{{ masterStore.sauces.length }} item</span>
+          <span class="rounded-full bg-rose-500/10 px-3 py-1 text-xs font-extrabold text-rose-700">{{ masterStore.sauces.length }} item</span>
         </div>
 
         <EmptyState v-if="!masterStore.sauces.length" title="Belum ada Saus" />
         
-        <div v-else class="overflow-x-auto">
+        <div v-else class="overflow-x-auto rounded-xl border border-dcelup-border/60">
           <table class="w-full text-left border-collapse text-sm">
             <thead>
-              <tr class="bg-dcelup-cream border-b border-dcelup-border text-dcelup-redDark font-black">
-                <th class="py-2.5 px-3">No</th>
-                <th class="py-2.5 px-3">Nama Saus</th>
-                <th class="py-2.5 px-3 text-right">Aksi</th>
+              <tr class="bg-dcelup-cream/70 border-b border-dcelup-border/80 text-dcelup-redDark text-xs font-black uppercase tracking-wider">
+                <th class="py-3.5 px-4 w-16 text-center">No</th>
+                <th class="py-3.5 px-4 text-left">Nama Saus</th>
+                <th class="py-3.5 px-4 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="(sauce, index) in masterStore.sauces" :key="sauce" class="border-b border-dcelup-border/60 hover:bg-white transition-colors">
-                <td class="py-2.5 px-3 font-semibold text-dcelup-textSoft">{{ index + 1 }}</td>
-                <td class="py-2.5 px-3 font-black text-dcelup-text">{{ sauce }}</td>
-                <td class="py-2.5 px-3 text-right">
-                  <BaseButton variant="danger" class="!px-3 !py-1 text-xs" @click="deleteSauce(sauce)">Hapus</BaseButton>
+            <tbody class="divide-y divide-dcelup-border/40">
+              <tr v-for="(sauce, index) in masterStore.sauces" :key="sauce" class="hover:bg-dcelup-creamSoft/60 transition-colors">
+                <td class="py-3.5 px-4 align-middle text-center font-bold text-dcelup-textSoft text-xs">{{ index + 1 }}</td>
+                <td class="py-3.5 px-4 align-middle font-extrabold text-dcelup-text">{{ sauce }}</td>
+                <td class="py-3.5 px-4 align-middle text-right whitespace-nowrap">
+                  <BaseButton variant="danger" class="!px-3 !py-1.5 text-xs" @click="deleteSauce(sauce)">Hapus</BaseButton>
                 </td>
               </tr>
             </tbody>

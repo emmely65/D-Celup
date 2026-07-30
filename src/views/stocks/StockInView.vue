@@ -16,7 +16,10 @@ const materials = ref([])
 const form = reactive({ material_id: '', qty: 1, price_per_unit: 0, movement_date: new Date().toISOString().slice(0, 10), note: '' })
 const isLoading = ref(false)
 
-onMounted(async () => { materials.value = unwrapList(await rawMaterialApi.getAll({ per_page: 100 })) })
+onMounted(async () => {
+  const res = await rawMaterialApi.getAll({ per_page: 100, is_active: 1 })
+  materials.value = unwrapList(res).filter(m => m.is_active !== false && Number(m.is_active) !== 0)
+})
 
 async function submit() {
   // BUG-12a: Validasi client-side sebelum submit
