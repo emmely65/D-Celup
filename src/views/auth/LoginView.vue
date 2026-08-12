@@ -35,8 +35,8 @@ async function submit() {
           </span>
         </div>
         
-        <h1 class="mt-4 text-2xl font-black tracking-tight text-dcelup-text">D'Celup POS System</h1>
-        <p class="mt-1 text-xs font-semibold text-dcelup-textSoft">Masuk untuk mengelola transaksi & persediaan stok.</p>
+        <h1 class="mt-4 text-2xl font-black tracking-tight text-dcelup-text">D'Celup System</h1>
+        <p class="mt-1 text-xs font-semibold text-dcelup-textSoft">Masuk ke akun Anda</p>
       </div>
 
       <form class="mt-6 space-y-4" @submit.prevent="submit">

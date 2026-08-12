@@ -116,8 +116,7 @@ async function deactivate(id) {
           <Users class="h-5 w-5" />
         </span>
         <div>
-          <h1 class="truncate text-lg font-black text-dcelup-text">Manajemen Pengguna</h1>
-          <p class="truncate text-xs font-semibold text-dcelup-textSoft hidden sm:block">Kelola akses akun admin dan kasir toko.</p>
+          <h1 class="truncate text-lg font-black text-dcelup-text">Pengguna</h1>
         </div>
       </div>
     </template>
@@ -137,7 +136,7 @@ async function deactivate(id) {
           <span class="mb-1 block text-xs font-extrabold text-dcelup-text uppercase tracking-wider">Role Hak Akses</span>
           <select v-model="form.role" class="h-11 w-full rounded-xl border border-dcelup-border/70 bg-dcelup-creamSoft/40 px-3.5 text-sm font-bold text-dcelup-text outline-none focus:border-dcelup-red focus:bg-white transition-all">
             <option value="admin">Admin System</option>
-            <option value="kasir">Kasir POS</option>
+            <option value="kasir">Kasir</option>
           </select>
         </label>
         <BaseButton class="h-11 w-full" @click="createUser">Simpan</BaseButton>

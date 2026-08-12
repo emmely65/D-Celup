@@ -79,8 +79,7 @@ async function submitCancel(payload) {
           <ReceiptText class="h-5 w-5" />
         </span>
         <div>
-          <h1 class="truncate text-lg font-black text-dcelup-text">Riwayat Pemasukan & Transaksi</h1>
-          <p class="truncate text-xs font-semibold text-dcelup-textSoft hidden sm:block">Pantau transaksi kasir dan pembatalan pesanan.</p>
+          <h1 class="truncate text-lg font-black text-dcelup-text">Riwayat Pemasukan</h1>
         </div>
       </div>
     </template>

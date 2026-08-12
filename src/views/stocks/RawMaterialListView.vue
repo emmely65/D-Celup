@@ -134,8 +134,7 @@ async function deactivate(id) {
           <Package class="h-4 w-4" />
         </div>
         <div>
-          <h1 class="truncate text-lg font-black tracking-tight text-dcelup-text">Stok Bahan Baku</h1>
-          <p class="truncate text-xs font-medium text-dcelup-textSoft hidden sm:block">Kelola persediaan bahan mentah dan batas stok minimal.</p>
+          <h1 class="truncate text-lg font-black tracking-tight text-dcelup-text">Stok Bahan</h1>
         </div>
       </div>
     </template>

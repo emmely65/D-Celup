@@ -397,7 +397,7 @@ export function setupMockAdapter(httpInstance) {
         trx_code: `TRX-${dateStr.replace(/-/g,'')}-${String(transactions.length + 1).padStart(4, '0')}`,
         trx_date: dateStr,
         user_id: 3,
-        customer_name: body.customer_name || 'Pelanggan POS',
+        customer_name: body.customer_name || 'Pelanggan',
         total_amount: String(body.total_amount || body.grand_total || '0.00'),
         payment_method: body.payment_method || 'cash',
         paid_amount: String(body.paid_amount || '0.00'),

@@ -73,8 +73,7 @@ onMounted(() => {
           <BarChart3 class="h-5 w-5" />
         </span>
         <div>
-          <h1 class="truncate text-lg font-black text-dcelup-text">Laporan Keuangan</h1>
-          <p class="truncate text-xs font-semibold text-dcelup-textSoft hidden sm:block">Ringkasan arus kas, ekspor laporan, dan perincian data.</p>
+          <h1 class="truncate text-lg font-black text-dcelup-text">Laporan</h1>
         </div>
       </div>
     </template>
@@ -109,9 +108,9 @@ onMounted(() => {
 
     <!-- KPI CARDS -->
     <div class="mt-5 grid gap-4 md:grid-cols-3">
-      <KpiCard :title="LABEL_PEMASUKAN" :value="formatRupiah(report?.summary?.total_income ?? report?.summary?.total_sales ?? 0)" tone="emerald" caption="Total transaksi lunas" />
-      <KpiCard :title="LABEL_PENGELUARAN" :value="formatRupiah(report?.summary?.total_expense ?? report?.summary?.total_expenses ?? 0)" tone="rose" caption="Total pengeluaran tercatat" />
-      <KpiCard :title="LABEL_SELISIH_KAS" :value="formatRupiah(report?.summary?.cash_difference ?? report?.summary?.estimated_cash_difference ?? 0)" tone="amber" caption="Bukan laporan laba bersih formal" />
+      <KpiCard :title="LABEL_PEMASUKAN" :value="formatRupiah(report?.summary?.total_income ?? report?.summary?.total_sales ?? 0)" tone="emerald" caption="Total transaksi" />
+      <KpiCard :title="LABEL_PENGELUARAN" :value="formatRupiah(report?.summary?.total_expense ?? report?.summary?.total_expenses ?? 0)" tone="rose" caption="Total pengeluaran" />
+      <KpiCard :title="LABEL_SELISIH_KAS" :value="formatRupiah(report?.summary?.cash_difference ?? report?.summary?.estimated_cash_difference ?? 0)" tone="amber" caption="Estimasi Kas" />
     </div>
 
     <!-- DETAIL PEMASUKAN & PENGELUARAN -->

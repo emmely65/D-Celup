@@ -60,7 +60,7 @@ const menuSections = computed(() => {
       title: 'UTAMA',
       items: [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['admin', 'kasir'] },
-        { name: 'Kasir POS', path: '/cashier', icon: ShoppingCart, roles: ['admin', 'kasir'] }
+        { name: 'Kasir', path: '/cashier', icon: ShoppingCart, roles: ['admin', 'kasir'] }
       ]
     },
     {
@@ -140,7 +140,7 @@ async function logout() {
             <p class="truncate font-black tracking-tight text-lg leading-none text-white">D'Celup</p>
             <Sparkles class="h-3.5 w-3.5 text-amber-300 shrink-0" />
           </div>
-          <p class="truncate text-xs font-semibold text-white/70 mt-0.5">Sempol Ayam POS</p>
+          <p class="truncate text-xs font-semibold text-white/70 mt-0.5">Sempol Ayam</p>
         </div>
         <div class="shrink-0 rounded-full bg-amber-400/20 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-amber-300 border border-amber-400/30 shadow-sm backdrop-blur-sm">
           {{ authStore.userRole }}

@@ -33,8 +33,7 @@ const cashierSummary = computed(() => dashboardStore.cashierSummary ?? {})
           <LayoutDashboard class="h-4 w-4" />
         </div>
         <div>
-          <h1 class="truncate text-lg font-black tracking-tight text-dcelup-text">Dashboard Overview</h1>
-          <p class="truncate text-xs font-medium text-dcelup-textSoft hidden sm:block">Ringkasan performa penjualan D'Celup hari ini.</p>
+          <h1 class="truncate text-lg font-black tracking-tight text-dcelup-text">Dashboard</h1>
         </div>
       </div>
     </template>
@@ -54,19 +53,19 @@ const cashierSummary = computed(() => dashboardStore.cashierSummary ?? {})
       <KpiCard
         title="Pemasukan Hari Ini"
         :value="formatRupiah(adminSummary.total_income ?? adminSummary.total_sales ?? 0)"
-        :caption="LABEL_PEMASUKAN"
+        caption="Hari ini"
         tone="emerald"
       />
       <KpiCard
         title="Pengeluaran Hari Ini"
         :value="formatRupiah(adminSummary.total_expense ?? adminSummary.total_expenses ?? 0)"
-        :caption="LABEL_PENGELUARAN"
+        caption="Hari ini"
         tone="rose"
       />
       <KpiCard
         :title="LABEL_SELISIH_KAS"
         :value="formatRupiah(adminSummary.cash_difference ?? adminSummary.estimated_cash_difference ?? 0)"
-        caption="Bukan laba bersih formal"
+        caption="Estimasi Kas"
         tone="amber"
       />
       <KpiCard
@@ -108,9 +107,6 @@ const cashierSummary = computed(() => dashboardStore.cashierSummary ?? {})
           </span>
           Top Produk Terlaris
         </h2>
-        <span class="text-xs font-semibold text-dcelup-textSoft bg-dcelup-creamSoft px-3 py-1 rounded-full border border-dcelup-border/60">
-          Gabungan Transaksi Admin & Kasir
-        </span>
       </div>
 
       <div v-if="dashboardStore.topProducts.length" class="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">

@@ -109,8 +109,7 @@ onMounted(() => fetchLogs(1))
 <template>
   <DashboardLayout>
     <template #header-text>
-      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Log Aktivitas</h1>
-      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Pantau jejak perubahan data di sistem.</p>
+      <h1 class="truncate text-lg font-black text-dcelup-text">Log Aktivitas</h1>
     </template>
 
     <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">

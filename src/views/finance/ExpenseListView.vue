@@ -110,8 +110,7 @@ async function deleteExpense(id) {
           <WalletCards class="h-5 w-5" />
         </span>
         <div>
-          <h1 class="truncate text-lg font-black text-dcelup-text">Pengeluaran Operasional</h1>
-          <p class="truncate text-xs font-semibold text-dcelup-textSoft hidden sm:block">Catat dan pantau beban pengeluaran warung.</p>
+          <h1 class="truncate text-lg font-black text-dcelup-text">Pengeluaran</h1>
         </div>
       </div>
     </template>

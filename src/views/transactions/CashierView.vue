@@ -90,8 +90,7 @@ async function submitTransaction() {
           <ShoppingBag class="h-4 w-4" />
         </div>
         <div>
-          <h1 class="truncate text-lg font-black tracking-tight text-dcelup-text">Kasir POS</h1>
-          <p class="truncate text-xs font-medium text-dcelup-textSoft hidden sm:block">Pilih varian menu, tentukan jumlah, dan proses transaksi.</p>
+          <h1 class="truncate text-lg font-black tracking-tight text-dcelup-text">Kasir</h1>
         </div>
       </div>
     </template>
@@ -101,12 +100,6 @@ async function submitTransaction() {
         {{ filteredVariants.length }} Varian Menu
       </span>
     </template>
-
-    <!-- Info banner -->
-    <div class="mb-4 flex items-center gap-2.5 rounded-xl border border-amber-200/80 bg-amber-50/60 p-3.5 text-xs font-semibold text-amber-900 shadow-xs">
-      <Info class="h-4 w-4 shrink-0 text-amber-600" />
-      <span>Catatan: Stok bahan dikelola terpisah oleh Admin dan tidak berkurang otomatis per item transaksi.</span>
-    </div>
 
     <!-- Success banner for last transaction -->
     <div v-if="lastTransaction" class="mb-4 flex items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 shadow-xs">

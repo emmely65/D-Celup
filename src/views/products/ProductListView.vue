@@ -123,8 +123,7 @@ function deleteSauce(name) {
 <template>
   <DashboardLayout>
     <template #header-text>
-      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Master Data Produk</h1>
-      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Kelola terpisah master Nama Produk, Kategori, dan Saus.</p>
+      <h1 class="truncate text-lg font-black text-dcelup-text">Master Produk</h1>
     </template>
 
     <!-- Tab Selection for Form Input -->

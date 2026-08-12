@@ -141,8 +141,7 @@ async function deactivate(id) {
 <template>
   <DashboardLayout>
     <template #header-text>
-      <h1 class="truncate text-lg font-extrabold text-dcelup-text">Varian Produk</h1>
-      <p class="truncate text-sm text-dcelup-textSoft hidden sm:block">Kelola varian harga & saus yang dikelompokkan sesuai Nama Produk.</p>
+      <h1 class="truncate text-lg font-black text-dcelup-text">Varian Produk</h1>
     </template>
 
     <!-- FORM TAMBAH VARIAN -->
