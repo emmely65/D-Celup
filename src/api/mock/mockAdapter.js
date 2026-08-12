@@ -20,12 +20,19 @@ export function setupMockAdapter(httpInstance) {
     const url = config.url || ''
     const method = (config.method || 'get').toLowerCase()
     
-    // helper response json
-    const jsonResponse = (data, status = 200) => {
-      return Promise.resolve({
+    // helper response json (sesuai struktur ApiResponse trait Laravel: { success: true, message: '...', data: [...], meta: {...} })
+    const jsonResponse = (data, message = 'Success', status = 200, meta = null) => {
+      const body = {
+        success: status >= 200 && status < 300,
+        message,
         data,
+      }
+      if (meta) body.meta = meta
+
+      return Promise.resolve({
+        data: body,
         status,
-        statusText: status === 200 ? 'OK' : 'Error',
+        statusText: status >= 200 && status < 300 ? 'OK' : 'Error',
         headers: { 'content-type': 'application/json' },
         config
       })
@@ -41,22 +48,14 @@ export function setupMockAdapter(httpInstance) {
       ) || initialMockUsers[0] // fallback to admin
 
       return jsonResponse({
-        success: true,
-        message: 'Login berhasil (Mock Mode)',
-        data: {
-          token: 'mock-jwt-token-dcelup-demo',
-          user
-        }
-      })
+        token: 'mock-jwt-token-dcelup-demo',
+        user
+      }, 'Login berhasil (Mock Mode)')
     }
 
     // 2. Auth: Me
     if (url.includes('/auth/me') && method === 'get') {
-      return jsonResponse({
-        success: true,
-        message: 'User profile (Mock Mode)',
-        data: initialMockUsers[0]
-      })
+      return jsonResponse(initialMockUsers[0], 'User profile (Mock Mode)')
     }
 
     // 3. Products: List
@@ -65,37 +64,32 @@ export function setupMockAdapter(httpInstance) {
         ...p,
         variants: initialMockVariants.filter(v => v.product_id === p.id && v.is_active === 1)
       }))
-      return jsonResponse({
-        success: true,
-        message: 'Daftar produk berhasil diambil',
-        data: {
-          data: fullProducts,
-          total: fullProducts.length,
-          current_page: 1,
-          last_page: 1
-        }
-      })
+      return jsonResponse(
+        fullProducts,
+        'Daftar produk berhasil diambil',
+        200,
+        { current_page: 1, per_page: 100, total: fullProducts.length, last_page: 1 }
+      )
     }
 
-    // 4. Product Variants: List
+    // 4. Product Variants: List (Digunakan di Kasir POS)
     if (url.includes('/product-variants') && method === 'get') {
-      const activeVariants = initialMockVariants.map(v => {
-        const prod = initialMockProducts.find(p => p.id === v.product_id)
-        return {
-          ...v,
-          product: prod || { id: v.product_id, name: 'Sempol' }
-        }
-      })
-      return jsonResponse({
-        success: true,
-        message: 'Daftar varian produk berhasil diambil',
-        data: {
-          data: activeVariants,
-          total: activeVariants.length,
-          current_page: 1,
-          last_page: 1
-        }
-      })
+      const activeVariants = initialMockVariants
+        .filter(v => v.is_active === 1)
+        .map(v => {
+          const prod = initialMockProducts.find(p => p.id === v.product_id)
+          return {
+            ...v,
+            product: prod || { id: v.product_id, name: 'Sempol' }
+          }
+        })
+
+      return jsonResponse(
+        activeVariants,
+        'Daftar varian produk berhasil diambil',
+        200,
+        { current_page: 1, per_page: 100, total: activeVariants.length, last_page: 1 }
+      )
     }
 
     // 5. Transactions: Create (Kasir POS Checkout)
@@ -115,108 +109,94 @@ export function setupMockAdapter(httpInstance) {
       }
       initialMockTransactions.unshift(newTrx)
 
-      return jsonResponse({
-        success: true,
-        message: 'Transaksi berhasil disimpan (Mock POS)',
-        data: newTrx
-      }, 201)
+      return jsonResponse(newTrx, 'Transaksi berhasil disimpan (Mock POS)', 201)
     }
 
     // 6. Transactions: List
     if (url.includes('/transactions') && method === 'get') {
-      return jsonResponse({
-        success: true,
-        message: 'Daftar transaksi berhasil diambil',
-        data: {
-          data: initialMockTransactions,
-          total: initialMockTransactions.length,
-          current_page: 1,
-          last_page: 1
-        }
-      })
+      return jsonResponse(
+        initialMockTransactions,
+        'Daftar transaksi berhasil diambil',
+        200,
+        { current_page: 1, per_page: 100, total: initialMockTransactions.length, last_page: 1 }
+      )
     }
 
     // 7. Dashboard Summaries
     if (url.includes('/dashboard/cashier-summary')) {
       return jsonResponse({
-        success: true,
-        message: 'Ringkasan kasir berhasil diambil',
-        data: {
-          today_transactions_count: initialMockTransactions.length,
-          today_revenue: initialMockTransactions.reduce((acc, t) => acc + parseFloat(t.total_amount || 0), 0),
-          cashier_name: 'Kasir Utama'
-        }
-      })
+        today_transactions_count: initialMockTransactions.length,
+        today_revenue: initialMockTransactions.reduce((acc, t) => acc + parseFloat(t.total_amount || 0), 0),
+        cashier_name: 'Kasir Utama'
+      }, 'Ringkasan kasir berhasil diambil')
     }
 
     if (url.includes('/dashboard/weekly-sales')) {
-      return jsonResponse({
-        success: true,
-        message: 'Penjualan mingguan berhasil diambil',
-        data: [
-          { date: 'Senin', total: 150000 },
-          { date: 'Selasa', total: 180000 },
-          { date: 'Rabu', total: 210000 },
-          { date: 'Kamis', total: 190000 },
-          { date: 'Jumat', total: 260000 },
-          { date: 'Sabtu', total: 320000 },
-          { date: 'Minggu', total: 290000 }
-        ]
-      })
+      return jsonResponse([
+        { date: 'Senin', total: 150000 },
+        { date: 'Selasa', total: 180000 },
+        { date: 'Rabu', total: 210000 },
+        { date: 'Kamis', total: 190000 },
+        { date: 'Jumat', total: 260000 },
+        { date: 'Sabtu', total: 320000 },
+        { date: 'Minggu', total: 290000 }
+      ], 'Penjualan mingguan berhasil diambil')
     }
 
     if (url.includes('/dashboard/top-products')) {
-      return jsonResponse({
-        success: true,
-        message: 'Produk terlaris berhasil diambil',
-        data: [
-          { name: 'Sempol Crispy - Saus Barbeque', total_qty: 120 },
-          { name: 'Sempol Original - Saus Teriyaki', total_qty: 95 },
-          { name: 'Sempol Bakar - Saus BBQ Mentai', total_qty: 70 },
-          { name: 'Twin Cup - Saus Teriyaki + Kacang', total_qty: 45 }
-        ]
-      })
+      return jsonResponse([
+        { name: 'Sempol Crispy - Saus Barbeque', total_qty: 120 },
+        { name: 'Sempol Original - Saus Teriyaki', total_qty: 95 },
+        { name: 'Sempol Bakar - Saus BBQ Mentai', total_qty: 70 },
+        { name: 'Twin Cup - Saus Teriyaki + Kacang', total_qty: 45 }
+      ], 'Produk terlaris berhasil diambil')
     }
 
     if (url.includes('/dashboard/low-stock-materials')) {
-      return jsonResponse({
-        success: true,
-        message: 'Stok bahan baku berhasil diambil',
-        data: initialMockRawMaterials
-      })
+      return jsonResponse(initialMockRawMaterials, 'Stok bahan baku berhasil diambil')
     }
 
     if (url.includes('/dashboard/admin-summary')) {
       return jsonResponse({
-        success: true,
-        message: 'Ringkasan admin berhasil diambil',
-        data: {
-          total_revenue: 1600000,
-          total_transactions: 48,
-          total_products: initialMockProducts.length,
-          total_raw_materials: initialMockRawMaterials.length
-        }
-      })
+        total_revenue: 1600000,
+        total_transactions: 48,
+        total_products: initialMockProducts.length,
+        total_raw_materials: initialMockRawMaterials.length
+      }, 'Ringkasan admin berhasil diambil')
     }
 
     // 8. Raw Materials
     if (url.includes('/raw-materials') && method === 'get') {
-      return jsonResponse({
-        success: true,
-        message: 'Bahan baku diambil',
-        data: { data: initialMockRawMaterials, total: initialMockRawMaterials.length }
-      })
+      return jsonResponse(
+        initialMockRawMaterials,
+        'Bahan baku diambil',
+        200,
+        { current_page: 1, per_page: 100, total: initialMockRawMaterials.length, last_page: 1 }
+      )
+    }
+
+    // 9. Expense Categories & Expenses
+    if (url.includes('/expense-categories') && method === 'get') {
+      return jsonResponse([
+        { id: 1, name: 'Bahan Baku', is_active: 1 },
+        { id: 2, name: 'Operasional', is_active: 1 }
+      ], 'Kategori pengeluaran diambil')
+    }
+
+    if (url.includes('/expenses') && method === 'get') {
+      return jsonResponse([], 'Daftar pengeluaran diambil')
+    }
+
+    // 10. Users
+    if (url.includes('/users') && method === 'get') {
+      return jsonResponse(initialMockUsers, 'Daftar user diambil')
     }
 
     // Fallback attempt original adapter
     try {
       return await originalAdapter(config)
     } catch (err) {
-      return jsonResponse({
-        success: true,
-        message: 'Mock response fallback',
-        data: []
-      })
+      return jsonResponse([], 'Mock response fallback')
     }
   }
 }
