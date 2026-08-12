@@ -1,30 +1,22 @@
 import axios from 'axios'
-import { createMockAdapter } from './mockBackend'
 
-const isLocalBackend =
-  import.meta.env.VITE_API_BASE_URL?.includes('dcelup-backend.test') ||
-  import.meta.env.VITE_API_BASE_URL?.includes('localhost') ||
-  import.meta.env.VITE_API_BASE_URL?.includes('127.0.0.1')
+const rawBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api/v1'
+const normalizedBaseUrl = rawBaseUrl.endsWith('/') ? rawBaseUrl.slice(0, -1) : rawBaseUrl
 
-const useMockApi =
-  import.meta.env.VITE_USE_MOCK_API === 'true' ||
-  import.meta.env.VITE_USE_MOCK_API === true ||
-  (import.meta.env.VITE_USE_MOCK_API !== 'false' && import.meta.env.PROD && isLocalBackend)
-
-const httpConfig = {
-  baseURL: useMockApi ? '/mock-api' : import.meta.env.VITE_API_BASE_URL,
+const http = axios.create({
+  baseURL: normalizedBaseUrl,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    'bypass-tunnel-reminder': 'true',
   },
-}
+})
 
-if (useMockApi) {
-  httpConfig.adapter = createMockAdapter()
+// Jika VITE_USE_MOCK_API === 'true' (misal saat dipublish ke Vercel untuk demo preview), pasang Mock Adapter
+if (import.meta.env.VITE_USE_MOCK_API === 'true' || import.meta.env.VITE_USE_MOCK_API === true) {
+  import('./mock/mockAdapter').then(({ setupMockAdapter }) => {
+    setupMockAdapter(http)
+  })
 }
-
-const http = axios.create(httpConfig)
 
 // Interceptor: tambahkan Bearer token ke setiap request
 http.interceptors.request.use((config) => {
@@ -35,9 +27,7 @@ http.interceptors.request.use((config) => {
   return config
 })
 
-// Interceptor: tangani 401 Unauthorized → paksa logout
-// Menggunakan CustomEvent untuk menghindari circular dependency:
-// http → authStore → authApi → http
+// Interceptor: tangani 401 Unauthorized -> paksa logout
 http.interceptors.response.use(
   (response) => response,
   (error) => {

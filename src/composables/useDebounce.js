@@ -11,8 +11,7 @@ export function useDebounce(source, delay = 300) {
     }, delay)
   })
 
-  // BUG-15: Bersihkan timer saat komponen unmount agar tidak terjadi
-  // state update pada komponen yang sudah tidak ada (memory leak)
+  // Bersihkan timer saat komponen unmount agar tidak terjadi memory leak
   onUnmounted(() => clearTimeout(timeoutId))
 
   return debounced

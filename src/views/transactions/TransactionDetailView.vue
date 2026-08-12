@@ -22,7 +22,6 @@ onMounted(async () => {
     const res = await transactionApi.getById(route.params.id)
     transaction.value = res.data.data
   } catch (error) {
-    // BUG-04: Catch sebelumnya tidak ada — user hanya melihat layar kosong saat API gagal
     uiStore.showToast('error', extractMessage(error))
   } finally {
     isLoading.value = false

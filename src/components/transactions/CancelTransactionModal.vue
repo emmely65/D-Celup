@@ -6,8 +6,7 @@ const props = defineProps({ open: { type: Boolean, default: false }, loading: { 
 const emit = defineEmits(['close', 'submit'])
 const reason = ref('')
 
-// BUG-03: Reset reason setiap modal dibuka agar alasan lama tidak terbawa ke pembatalan berikutnya
-// BUG-02: Watcher self-assignment sebelumnya (reason.value = val) sudah dihapus — tidak berguna
+// Reset reason setiap modal dibuka
 watch(() => props.open, (isOpen) => {
   if (isOpen) reason.value = ''
 })

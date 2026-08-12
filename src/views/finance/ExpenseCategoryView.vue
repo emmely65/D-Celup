@@ -14,7 +14,6 @@ const categories = ref([])
 const form = reactive({ name: '', is_active: true })
 onMounted(fetchCategories)
 
-// BUG-06: Tambah try/catch ke semua fungsi — sebelumnya tidak ada error handling
 async function fetchCategories() {
   try {
     categories.value = unwrapList(await expenseCategoryApi.getAll({ per_page: 100 }))

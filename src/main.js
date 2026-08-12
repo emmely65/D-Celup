@@ -12,5 +12,5 @@ createApp(App)
   .use(router)
   .mount('#app')
 
-// BUG-10: Aktifkan listener 401 agar Pinia state ikut bersih saat token expired
+// Aktifkan listener 401 agar Pinia state ikut bersih saat token expired
 useAuthStore().setupUnauthorizedListener()
