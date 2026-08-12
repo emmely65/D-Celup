@@ -41,11 +41,11 @@ export function setupMockAdapter(httpInstance) {
     { id: 3, name: 'Gaji & Bonus', is_active: 1, created_at: '2026-07-24 14:11:08' }
   ])
   let expenses = loadStorage('dcelup_mock_expenses', [
-    { id: 1, category_id: 1, category: { id: 1, name: 'Bahan Baku' }, amount: '120000.00', description: 'Pembelian Daging Ayam 10kg', expense_date: '2026-08-10', created_by: 1 },
-    { id: 2, category_id: 2, category: { id: 2, name: 'Operasional Toko' }, amount: '35000.00', description: 'Gas LPG 3kg & Plastik', expense_date: '2026-08-11', created_by: 1 }
+    { id: 1, category_id: 1, category: { id: 1, name: 'Bahan Baku' }, amount: '120000.00', description: 'Pembelian Daging Ayam 10kg', expense_date: new Date().toISOString().slice(0,10), created_by: 1 },
+    { id: 2, category_id: 2, category: { id: 2, name: 'Operasional Toko' }, amount: '35000.00', description: 'Gas LPG 3kg & Plastik', expense_date: new Date().toISOString().slice(0,10), created_by: 1 }
   ])
   let stockMovements = loadStorage('dcelup_mock_stock_movements', [
-    { id: 1, material_id: 1, type: 'in', qty: '10.000', balance_before: '5.500', balance_after: '15.500', note: 'Restock bahan baku harian', created_at: '2026-08-10 10:00:00', material: { id: 1, name: 'Daging Ayam Fillet', unit: 'kg' } }
+    { id: 1, material_id: 1, type: 'in', qty: '10.000', balance_before: '5.500', balance_after: '15.500', note: 'Restock bahan baku harian', created_at: new Date().toISOString(), material: { id: 1, name: 'Daging Ayam Fillet', unit: 'kg' } }
   ])
   let activityLogs = loadStorage('dcelup_mock_activity_logs', [
     { id: 1, user_id: 1, action: 'login', module: 'auth', detail: { login: 'admin' }, ip_address: '127.0.0.1', created_at: new Date().toISOString() }
@@ -349,34 +349,63 @@ export function setupMockAdapter(httpInstance) {
     }
 
     // ==========================================
-    // 6. TRANSAKSI / POS (CHECKOUT & CANCEL)
+    // 6. TRANSAKSI / POS (CHECKOUT & CANCEL & DETAIL)
     // ==========================================
     const cancelTrxId = matchId('/transactions/(\\d+)/cancel')
     if (cancelTrxId && method === 'post') {
       const trx = transactions.find(t => t.id === cancelTrxId)
       if (trx) {
-        trx.status = 'cancelled'
+        trx.status = 'canceled'
         saveStorage('dcelup_mock_transactions', transactions)
         logActivity('cancel', 'transactions', { transaction_id: trx.id })
         return jsonResponse(trx, 'Transaksi berhasil dibatalkan')
       }
     }
 
+    const singleTrxId = matchId('/transactions/(\\d+)$')
+    if (singleTrxId && method === 'get') {
+      const trx = transactions.find(t => t.id === singleTrxId)
+      if (trx) {
+        return jsonResponse(trx, 'Detail transaksi diambil')
+      }
+    }
+
     if (url.includes('/transactions') && method === 'post') {
       const body = parseBody()
+      const now = new Date()
+      const dateStr = now.toISOString().slice(0,10)
+      const formattedItems = (body.items || []).map((item, idx) => {
+        const v = variants.find(varItem => varItem.id === Number(item.variant_id))
+        const prod = v ? products.find(p => p.id === v.product_id) : null
+        const price = parseFloat(item.price || v?.price || 0)
+        const qty = Number(item.qty || 1)
+        return {
+          id: idx + 1,
+          variant_id: item.variant_id,
+          product_name_snapshot: prod ? prod.name : 'Sempol Ayam',
+          variant_name_snapshot: v ? `${v.sauce_name} - ${v.type}` : 'Saus Teriyaki',
+          sauce_name: v ? v.sauce_name : 'Saus Teriyaki',
+          qty,
+          unit_price: String(price.toFixed(2)),
+          subtotal: String((price * qty).toFixed(2)),
+          variant: v ? { ...v, product: prod } : null
+        }
+      })
+
       const newTrx = {
         id: transactions.length ? Math.max(...transactions.map(t => t.id)) + 1 : 1,
-        trx_code: `TRX-${new Date().toISOString().slice(0,10).replace(/-/g,'')}-${String(transactions.length + 1).padStart(4, '0')}`,
+        trx_code: `TRX-${dateStr.replace(/-/g,'')}-${String(transactions.length + 1).padStart(4, '0')}`,
+        trx_date: dateStr,
         user_id: 3,
         customer_name: body.customer_name || 'Pelanggan POS',
         total_amount: String(body.total_amount || body.grand_total || '0.00'),
         payment_method: body.payment_method || 'cash',
         paid_amount: String(body.paid_amount || '0.00'),
         change_amount: String(body.change_amount || '0.00'),
-        status: 'completed',
-        created_at: new Date().toISOString(),
+        status: 'paid', // Status wajib 'paid' agar sesuai dengan Laravel backend
+        created_at: now.toISOString(),
         user: { id: 3, name: 'Kasir Utama' },
-        items: body.items || []
+        items: formattedItems
       }
       transactions.unshift(newTrx)
       saveStorage('dcelup_mock_transactions', transactions)
@@ -385,7 +414,21 @@ export function setupMockAdapter(httpInstance) {
     }
 
     if (url.includes('/transactions') && method === 'get') {
-      return jsonResponse(transactions, 'Daftar transaksi berhasil diambil', 200, { current_page: 1, per_page: 100, total: transactions.length, last_page: 1 })
+      let filtered = [...transactions]
+      // Support date filtering jika dikirim dari TransactionHistoryView
+      if (url.includes('date_from')) {
+        const params = new URLSearchParams(url.split('?')[1] || '')
+        const dateFrom = params.get('date_from')
+        const dateTo = params.get('date_to')
+        if (dateFrom) {
+          filtered = filtered.filter(t => {
+            const tDate = (t.created_at || t.trx_date || '').slice(0, 10)
+            if (dateTo) return tDate >= dateFrom && tDate <= dateTo
+            return tDate >= dateFrom
+          })
+        }
+      }
+      return jsonResponse(filtered, 'Daftar transaksi berhasil diambil', 200, { current_page: 1, per_page: 100, total: filtered.length, last_page: 1 })
     }
 
     // ==========================================
@@ -478,48 +521,112 @@ export function setupMockAdapter(httpInstance) {
     }
 
     // ==========================================
-    // 9. DASHBOARD & REPORTS
+    // 9. DASHBOARD & REPORTS (REALTIME AGGREGATION DISESUAIKAN DENGAN LARAVEL BACKEND)
     // ==========================================
+    const todayStr = new Date().toISOString().slice(0, 10)
+    const paidTransactions = transactions.filter(t => t.status === 'paid' || t.status === 'completed')
+
+    const todayTransactions = paidTransactions.filter(t => {
+      const tDate = (t.created_at || t.trx_date || '').slice(0, 10)
+      return tDate === todayStr
+    })
+
+    const todaySales = todayTransactions.reduce((sum, t) => sum + parseFloat(t.total_amount || 0), 0)
+    const todayExpensesSum = expenses
+      .filter(e => (e.expense_date || e.created_at || '').slice(0, 10) === todayStr)
+      .reduce((sum, e) => sum + parseFloat(e.amount || 0), 0)
+
     if (url.includes('/dashboard/cashier-summary')) {
       return jsonResponse({
-        today_transactions_count: transactions.length,
-        today_revenue: transactions.reduce((acc, t) => acc + parseFloat(t.total_amount || 0), 0),
-        cashier_name: 'Kasir Utama'
+        date: todayStr,
+        my_transaction_count: todayTransactions.length,
+        my_total_sales: todaySales,
+        total_transactions: todayTransactions.length,
+        transaction_count: todayTransactions.length,
+        total_sales: todaySales,
+        total_income: todaySales,
+        low_stock_materials: rawMaterials.filter(m => m.is_active && parseFloat(m.current_stock) <= parseFloat(m.min_stock))
       }, 'Ringkasan kasir diambil')
-    }
-
-    if (url.includes('/dashboard/weekly-sales')) {
-      return jsonResponse([
-        { date: 'Senin', total: 150000 },
-        { date: 'Selasa', total: 180000 },
-        { date: 'Rabu', total: 210000 },
-        { date: 'Kamis', total: 190000 },
-        { date: 'Jumat', total: 260000 },
-        { date: 'Sabtu', total: 320000 },
-        { date: 'Minggu', total: 290000 }
-      ], 'Penjualan mingguan diambil')
-    }
-
-    if (url.includes('/dashboard/top-products')) {
-      return jsonResponse([
-        { name: 'Sempol Crispy - Saus Barbeque', total_qty: 120 },
-        { name: 'Sempol Original - Saus Teriyaki', total_qty: 95 },
-        { name: 'Sempol Bakar - Saus BBQ Mentai', total_qty: 70 },
-        { name: 'Twin Cup - Saus Teriyaki + Kacang', total_qty: 45 }
-      ], 'Produk terlaris diambil')
-    }
-
-    if (url.includes('/dashboard/low-stock-materials')) {
-      return jsonResponse(rawMaterials, 'Stok bahan baku diambil')
     }
 
     if (url.includes('/dashboard/admin-summary')) {
       return jsonResponse({
-        total_revenue: transactions.reduce((acc, t) => acc + parseFloat(t.total_amount || 0), 0),
-        total_transactions: transactions.length,
-        total_products: products.length,
-        total_raw_materials: rawMaterials.length
+        date: todayStr,
+        total_sales: todaySales,
+        total_income: todaySales,
+        transaction_count: todayTransactions.length,
+        total_transactions: todayTransactions.length,
+        total_expenses: todayExpensesSum,
+        total_expense: todayExpensesSum,
+        estimated_cash_difference: todaySales - todayExpensesSum,
+        cash_difference: todaySales - todayExpensesSum,
+        low_stock_count: rawMaterials.filter(m => m.is_active && parseFloat(m.current_stock) <= parseFloat(m.min_stock)).length
       }, 'Ringkasan admin diambil')
+    }
+
+    if (url.includes('/dashboard/weekly-sales')) {
+      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
+      const weeklyData = []
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date()
+        d.setDate(d.getDate() - i)
+        const dStr = d.toISOString().slice(0, 10)
+        const dayName = days[d.getDay()]
+
+        const daySales = paidTransactions
+          .filter(t => (t.created_at || t.trx_date || '').slice(0, 10) === dStr)
+          .reduce((sum, t) => sum + parseFloat(t.total_amount || 0), 0)
+
+        const dayExp = expenses
+          .filter(e => (e.expense_date || e.created_at || '').slice(0, 10) === dStr)
+          .reduce((sum, e) => sum + parseFloat(e.amount || 0), 0)
+
+        weeklyData.push({
+          date: dStr,
+          day_name: dayName,
+          total_income: daySales,
+          total_expense: dayExp,
+          transaction_count: paidTransactions.filter(t => (t.created_at || t.trx_date || '').slice(0, 10) === dStr).length
+        })
+      }
+      return jsonResponse(weeklyData, 'Penjualan mingguan diambil')
+    }
+
+    if (url.includes('/dashboard/top-products')) {
+      // Hitung agregat penjualan per produk varian dari seluruh transaksi yang paid
+      const productSalesMap = {}
+
+      paidTransactions.forEach(trx => {
+        (trx.items || []).forEach(item => {
+          const key = item.variant_name_snapshot || item.variant_id || 'Varian'
+          if (!productSalesMap[key]) {
+            productSalesMap[key] = {
+              id: key,
+              product_name: item.product_name_snapshot || 'Sempol Ayam',
+              variant_name: item.variant_name_snapshot || 'Original',
+              sauce_name: item.sauce_name || item.variant_name_snapshot || 'Original',
+              total_qty: 0,
+              total_revenue: 0
+            }
+          }
+          productSalesMap[key].total_qty += Number(item.qty || 1)
+          productSalesMap[key].total_revenue += parseFloat(item.subtotal || item.unit_price || 0)
+        })
+      })
+
+      const topList = Object.values(productSalesMap)
+        .sort((a, b) => b.total_qty - a.total_qty)
+        .slice(0, 5)
+
+      return jsonResponse(topList.length ? topList : [
+        { id: 1, product_name: 'Sempol Ayam Original', variant_name: 'Saus Teriyaki', sauce_name: 'Saus Teriyaki', total_qty: 12, total_revenue: 72000 },
+        { id: 2, product_name: 'Sempol Ayam Crispy', variant_name: 'Saus Barbeque Spicy', sauce_name: 'Saus Barbeque Spicy', total_qty: 8, total_revenue: 56000 }
+      ], 'Produk terlaris diambil')
+    }
+
+    if (url.includes('/dashboard/low-stock-materials')) {
+      const lowStock = rawMaterials.filter(m => m.is_active && parseFloat(m.current_stock) <= parseFloat(m.min_stock))
+      return jsonResponse(lowStock, 'Stok menipis diambil')
     }
 
     if (url.includes('/activity-logs') && method === 'get') {
