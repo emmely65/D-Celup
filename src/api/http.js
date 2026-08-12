@@ -12,9 +12,20 @@ const http = axios.create({
   },
 })
 
-// Otomatis aktifkan Mock Adapter jika di Vercel (*.vercel.app) atau VITE_USE_MOCK_API === 'true'
-const isVercelEnv = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')
-const isMockEnabled = import.meta.env.VITE_USE_MOCK_API === 'true' || import.meta.env.VITE_USE_MOCK_API === true || isVercelEnv
+// Auto-detect if hosted on HTTPS Vercel or any environment without direct local BE
+const isHttpsLocalhostMismatch = typeof window !== 'undefined' && 
+  window.location.protocol === 'https:' && 
+  normalizedBaseUrl.startsWith('http://127.0.0.1')
+
+const isVercelEnv = typeof window !== 'undefined' && (
+  window.location.hostname.includes('vercel.app') || 
+  window.location.hostname.includes('vercel')
+)
+
+const isMockEnabled = import.meta.env.VITE_USE_MOCK_API === 'true' || 
+  import.meta.env.VITE_USE_MOCK_API === true || 
+  isVercelEnv || 
+  isHttpsLocalhostMismatch
 
 if (isMockEnabled) {
   setupMockAdapter(http)

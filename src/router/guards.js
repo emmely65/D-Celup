@@ -11,17 +11,16 @@ export function setupGuards(router) {
       authStore.hydrateFromStorage()
     }
 
-    // Route tidak butuh auth tapi user sudah login → arahkan ke dashboard
-    if (!requiresAuth && authStore.isAuthenticated) {
-      return { name: 'dashboard' }
-    }
-
-    // Route tidak butuh auth → izinkan lanjut
+    // Route publik (seperti /login)
     if (!requiresAuth) {
+      if (authStore.isAuthenticated && to.name === 'login') {
+        const valid = await authStore.fetchMe()
+        if (valid) return { name: 'dashboard' }
+      }
       return true
     }
 
-    // Route butuh auth, belum authenticated → validasi token ke server
+    // Route yang membutuhkan autentikasi
     if (!authStore.isAuthenticated) {
       const valid = await authStore.fetchMe()
       if (!valid) return { name: 'login' }

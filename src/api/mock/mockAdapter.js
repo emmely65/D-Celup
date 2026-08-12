@@ -633,6 +633,37 @@ export function setupMockAdapter(httpInstance) {
       return jsonResponse(activityLogs, 'Activity logs diambil', 200, { current_page: 1, per_page: 100, total: activityLogs.length, last_page: 1 })
     }
 
+    // ==========================================
+    // 10. REPORTS (WEEKLY, CUSTOM & EXPORT)
+    // ==========================================
+    if (url.includes('/reports/')) {
+      if (url.includes('/pdf') || url.includes('/excel')) {
+        return Promise.resolve({
+          data: new Blob(['Report demo content'], { type: 'text/plain' }),
+          status: 200,
+          statusText: 'OK',
+          headers: { 'content-type': 'application/octet-stream' },
+          config
+        })
+      }
+
+      const totalInc = paidTransactions.reduce((sum, t) => sum + parseFloat(t.total_amount || 0), 0)
+      const totalExp = expenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0)
+
+      return jsonResponse({
+        summary: {
+          total_income: totalInc,
+          total_sales: totalInc,
+          total_expense: totalExp,
+          total_expenses: totalExp,
+          cash_difference: totalInc - totalExp,
+          estimated_cash_difference: totalInc - totalExp
+        },
+        transactions: paidTransactions,
+        expenses: expenses
+      }, 'Laporan diambil')
+    }
+
     // Fallback attempt original adapter
     try {
       return await originalAdapter(config)
