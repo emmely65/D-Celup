@@ -10,8 +10,9 @@ export function setupMockAdapter(httpInstance) {
   const originalAdapter = httpInstance.defaults.adapter
 
   httpInstance.defaults.adapter = async (config) => {
-    // Pastikan VITE_USE_MOCK_API aktif
-    const useMock = import.meta.env.VITE_USE_MOCK_API === 'true' || import.meta.env.VITE_USE_MOCK_API === true
+    // Pastikan VITE_USE_MOCK_API aktif atau berjalan di Vercel (*.vercel.app)
+    const isVercelEnv = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')
+    const useMock = import.meta.env.VITE_USE_MOCK_API === 'true' || import.meta.env.VITE_USE_MOCK_API === true || isVercelEnv
     if (!useMock) {
       return originalAdapter(config)
     }

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { setupMockAdapter } from './mock/mockAdapter'
 
 const rawBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api/v1'
 const normalizedBaseUrl = rawBaseUrl.endsWith('/') ? rawBaseUrl.slice(0, -1) : rawBaseUrl
@@ -11,11 +12,12 @@ const http = axios.create({
   },
 })
 
-// Jika VITE_USE_MOCK_API === 'true' (misal saat dipublish ke Vercel untuk demo preview), pasang Mock Adapter
-if (import.meta.env.VITE_USE_MOCK_API === 'true' || import.meta.env.VITE_USE_MOCK_API === true) {
-  import('./mock/mockAdapter').then(({ setupMockAdapter }) => {
-    setupMockAdapter(http)
-  })
+// Otomatis aktifkan Mock Adapter jika di Vercel (*.vercel.app) atau VITE_USE_MOCK_API === 'true'
+const isVercelEnv = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')
+const isMockEnabled = import.meta.env.VITE_USE_MOCK_API === 'true' || import.meta.env.VITE_USE_MOCK_API === true || isVercelEnv
+
+if (isMockEnabled) {
+  setupMockAdapter(http)
 }
 
 // Interceptor: tambahkan Bearer token ke setiap request
